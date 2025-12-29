@@ -1,0 +1,242 @@
+import { useState } from "react";
+import InputComponent from "../components/comman/inputComponent";
+import Button from "../components/comman/Button";
+import { useNavigate } from "react-router-dom";
+import { registerApi } from "../services/AuthService";
+import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../app/hooks";
+import { registerUser } from "../features/auth/authAPI";
+
+export default function Signup() {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+
+    const [FullName, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("") 
+    const [confirmPassword, setConfirmPassword] = useState("")
+
+    const [nameerror, setNameErrors] = useState("")
+    const [emailerror, setemailErrors] = useState("")
+    const [passworderror, setpasswordErrors] = useState("")
+    const [confirmPassworderror, setConfirmPasswordErrors] = useState("")
+
+   
+
+    /* ---------------- HANDLERS ---------------- */
+
+function names(e: React.ChangeEvent<HTMLInputElement>) {
+   const setnamee= setName(e.target.value)
+    console.log("setnamee", setnamee)
+
+}
+function emailId(e: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(e.target.value)
+}
+function passwords(e: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(e.target.value)
+}
+function confirmPwd(e: React.ChangeEvent<HTMLInputElement>) {
+    setConfirmPassword(e.target.value)
+}
+
+    /* ---------------- VALIDATIONS ---------------- */
+
+    function nameValidate(){
+        // Name
+        if (!FullName.trim()) {
+            setNameErrors("Full name is required");
+            return false;
+        } 
+        if (FullName.length < 2) {
+            setNameErrors("Name must be at least 2 characters");
+            return false;
+        }
+        setName('')
+        return true
+    }
+       
+       
+function emailValidate(){
+    // Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+        setemailErrors("Email is required");
+        return false;
+    } 
+     if (!emailRegex.test(email)) {
+        setemailErrors("Enter a valid email address");
+        return false;
+    }
+    setEmail("")
+    return true
+}
+      
+function passwordValidate(){
+
+    // Password
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+    if (!password) {
+        setpasswordErrors("Password is required");
+        return false;
+    } 
+     if (!passwordRegex.test(password)) {
+        setpasswordErrors
+            ("Password must be at least 8 characters and include letters & numbers");
+        return false;
+    }
+
+    setPassword('')
+    return true
+}
+function confirmPwdValidation(){
+    // Confirm Password
+    if (!confirmPassword) {
+        setConfirmPasswordErrors("Please confirm your password");
+        return false;
+    } 
+     if (password !== confirmPassword) {
+        setConfirmPasswordErrors("Passwords do not match");
+        return false;
+    }
+    setConfirmPassword("")
+    return true
+}
+
+    /* ---------------- SUBMIT ---------------- */
+
+    const handleSignup = (e: React.FormEvent) => {
+        e.preventDefault();
+      console.log("register")
+        const isName = nameValidate()
+            const isEmail = emailValidate()
+        const isPwd = passwordValidate()
+        const isCpwd = confirmPwdValidation()
+        if (!isName || !isEmail || !isPwd || !isCpwd) return
+        console.log("register after valid")
+
+
+        // 🚧 Next step: API call
+        // await signupUser(formData)
+
+        dispatch(registerUser({ FullName,email,password }))
+            .unwrap()
+            .then(() => navigate("/login"))
+            .catch(() => { });
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-3 relative overflow-hidden">
+            {/* Subtle background decoration to match Login */}
+            <div className="absolute top-0 right-0 w-full h-72 bg-indigo-900 z-0 opacity-[0.03] " style={{ clipPath: 'polygon(0 0, 100% 0, 100% 60%, 0 100%)' }}></div>
+
+            <div className="w-full max-w-md bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.05)] border border-slate-100 p-10 z-20">
+                <div className="text-center mb-6">
+                    <div className="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                        <svg className="w-7 h-7 text-indigo-600 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                    </div>
+                    <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Create your account</h1>
+                    <p className="text-sm text-slate-500 mt-2">Start organizing your projects today</p>
+                </div>
+
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Full Name</label>
+                        <form className="space-y-4" onSubmit={handleSignup}>
+                            {/* Name */}
+                            <div>
+                                {nameerror && (
+                                    <p className="text-xs text-red-500 mt-1 ml-2">{nameerror}</p>
+                                )}
+                                <InputComponent
+                                    name="FullName"
+                                    type="text"
+                                    placeholder="Full name"
+                                    value={FullName}
+                                    onChange={names}
+                                />
+                               
+                            </div>
+
+                            {/* Email */}
+                            <div>
+                                {emailerror && (
+                                    <p className="text-xs text-red-500 mt-1 ml-2">{emailerror}</p>
+                                )}
+                                <InputComponent
+                                    name="email"
+                                    type="email"
+                                    placeholder="Email address"
+                                    value={email}
+                                    onChange={emailId}
+                                />
+                               
+                            </div>
+
+                            {/* Password */}
+                            <div>
+                                {passworderror && (
+                                    <p className="text-xs text-red-500 mt-1 ml-2">{passworderror}</p>
+                                )}
+                                <InputComponent
+                                    name="password"
+                                    type="password"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={passwords}
+                                />
+                               
+                            </div>
+
+                            {/* Confirm Password */}
+                            <div>
+                                {confirmPassworderror && (
+                                    <p className="text-xs text-red-500 mt-1 ml-2">
+                                        {confirmPassworderror}
+                                    </p>
+                                )}
+                                <InputComponent
+                                    name="confirmPassword"
+                                    type="password"
+                                    placeholder="Confirm password"
+                                    value={confirmPassword}
+                                    onChange={confirmPwd}
+                                />
+                               
+                            </div>
+
+                            <Button
+                                type="submit"
+                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl"
+                            >
+                                Get Started for Free
+                            </Button>
+                        </form>
+                        
+                    </div>    
+                     <div className="mt-2 text-center border-t border-slate-50 pt-3">
+                    <p className="text-sm text-slate-500">
+                        Already have an account?{" "}
+                        <button
+                            onClick={() => navigate("/login")}
+                            className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors"
+                        >
+                            Sign in
+                        </button>
+                    </p>
+                </div>
+
+                <p className="text-[10px] text-center text-slate-400 mt-6 px-4">
+                    By clicking "Get Started", you agree to our
+                    <span className="underline cursor-pointer mx-1">Terms of Service</span>
+                    and
+                    <span className="underline cursor-pointer ml-1">Privacy Policy</span>.
+                </p>
+            </div>
+        </div>
+            </div>
+    );
+}
