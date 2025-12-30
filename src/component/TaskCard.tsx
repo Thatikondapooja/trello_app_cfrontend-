@@ -1,52 +1,30 @@
-import { useSortable } from "@dnd-kit/sortable";
+import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { Card } from "../features/auth/card/types";
 
-interface Props {
-    id: number;
-    title: string;
-}
-
-const TaskCard = ({ id, title }: Props) => {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        isDragging,
-    } = useSortable({
-        id,
+export default function TaskCard({ card }: { card: Card }) {
+    const { setNodeRef, listeners, attributes, transform } = useDraggable({
+        id: `card-${card.id}`,
         data: {
-            type: 'card',
-            card: { id, title }
-        }
+            type: "CARD",
+            cardId: card.id,
+            listId: card.listId,
+        },
     });
 
     const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
+        transform: CSS.Translate.toString(transform),
     };
 
     return (
         <div
             ref={setNodeRef}
-            style={style}
-            {...attributes}
             {...listeners}
-            className={`
-                bg-white rounded-xl p-3 shadow-sm 
-                hover:shadow-md transition-all 
-                cursor-grab active:cursor-grabbing 
-                border border-gray-100 hover:border-purple-200 
-                group
-                ${isDragging ? 'mb-2 opacity-30' : 'opacity-100'}
-            `}
+            {...attributes}
+            style={style}
+            className="bg-white p-3 rounded-lg shadow cursor-grab active:cursor-grabbing"
         >
-            <p className="text-sm text-gray-700 font-medium group-hover:text-purple-600 transition-colors">
-                {title}
-            </p>
+            {card.title}
         </div>
     );
-};
-
-export default TaskCard;
+}

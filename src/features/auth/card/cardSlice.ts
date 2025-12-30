@@ -4,7 +4,7 @@ import { createCard, fetchCardsByList, moveCardThunk } from "./cardThunks";
 interface Card {
     id: number;
     title: string;
-    listId: string;
+    listId: number;
 }
 
 interface CardState {

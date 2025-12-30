@@ -9,7 +9,7 @@ import api from "../../../services/api";
 export const createCard = createAsyncThunk(
     "card/create",
     async (
-        payload: { title: string; listId: string },
+        payload: { title: string; listId: number },
         { rejectWithValue }
     ) => {
         try {
@@ -24,7 +24,7 @@ export const createCard = createAsyncThunk(
 // cardThunks.ts
 export const fetchCardsByList = createAsyncThunk(
     "card/fetchByList",
-    async (listId: string, { rejectWithValue }) => {
+    async (listId: number, { rejectWithValue }) => {
         try {
             const res = await api.get(`/cards/list/${listId}`);
             return { listId, cards: res.data };

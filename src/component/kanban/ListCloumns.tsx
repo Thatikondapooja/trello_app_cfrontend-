@@ -7,12 +7,12 @@ import TaskCard from "../TaskCard";
 import { Card } from "../../features/auth/card/types";
 
 interface ListColumnProps {
-    listId: string;
+    listId: number;
     title: string;
     cards: Card[];
     cardTitles: Record<string, string>;
     setCardTitles: Dispatch<SetStateAction<Record<string, string>>>;
-    onAddCard: (listId: string) => void;
+    onAddCard: (listId: number) => void;
 }
 
 export default function ListColumn({
@@ -25,9 +25,13 @@ export default function ListColumn({
 }: ListColumnProps) {
     const [showAddCard, setShowAddCard] = useState(false);
 
-    // 🔥 Make LIST droppable
+    // ✅ LIST is droppable
     const { setNodeRef } = useDroppable({
-        id: listId, // IMPORTANT: drop target id
+        id: `list-${listId}`,
+        data: {
+            type: "LIST",
+            listId,
+        },
     });
 
     return (
@@ -35,23 +39,21 @@ export default function ListColumn({
             ref={setNodeRef}
             className="w-72 bg-indigo-50 rounded-xl p-3 shadow flex flex-col"
         >
-            {/* ===== LIST TITLE ===== */}
             <h2 className="font-semibold text-sm mb-3 text-gray-800">
                 {title}
             </h2>
 
-            {/* ===== CARDS ===== */}
+            {/* CARDS */}
             <div className="flex flex-col gap-2 mb-2">
                 {cards.map((card) => (
                     <TaskCard
                         key={card.id}
-                        id={card.id}       // 🔥 used for drag
-                        title={card.title}
+                        card={card}
                     />
                 ))}
             </div>
 
-            {/* ===== ADD CARD SECTION ===== */}
+            {/* ADD CARD */}
             {showAddCard ? (
                 <div className="mt-2">
                     <InputComponent
@@ -65,33 +67,17 @@ export default function ListColumn({
                         placeholder="Enter card title..."
                     />
 
-                    <div className="flex items-center gap-2 mt-2">
-                        <Button
-                            onClick={() => {
-                                onAddCard(listId);
-                                setShowAddCard(false);
-                            }}
-                        >
+                    <div className="flex gap-2 mt-2">
+                        <Button onClick={() => { onAddCard(listId); setShowAddCard(false); }}>
                             Add Card
                         </Button>
-
-                        <button
-                            onClick={() => setShowAddCard(false)}
-                            className="text-gray-600 hover:text-gray-800"
-                        >
-                            ✕
-                        </button>
+                        <button onClick={() => setShowAddCard(false)}>✕</button>
                     </div>
                 </div>
             ) : (
-                <div>
-                <Button
-                    variant="ghost"
-                    onClick={() => setShowAddCard(true)}
-                >
+                <Button variant="ghost" onClick={() => setShowAddCard(true)}>
                     + Add card
                 </Button>
-                </div>
             )}
         </div>
     );

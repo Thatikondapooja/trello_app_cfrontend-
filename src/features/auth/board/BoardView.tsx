@@ -342,7 +342,7 @@ export default function BoardView() {
         setIsAddingList(false);
     };
 
-    const handleAddCard = (listId: string) => {
+    const handleAddCard = (listId: number) => {
         const title = cardTitles[listId];
         if (!title) return;
 
@@ -368,17 +368,30 @@ export default function BoardView() {
 
         if (!over) return;
 
-        dispatch(
-            moveCardThunk({
-                cardId: (active.id),
-                toListId: (over.id),
-            })
-        );
+        const activeData = active.data.current;
+        const overData = over.data.current;
 
+        // ✅ Only allow CARD → LIST drop
+        if (
+            activeData?.type === "CARD" &&
+            overData?.type === "LIST" &&
+            activeData.listId !== overData.listId
+        ) {
+            dispatch(
+                moveCardThunk({
+                    cardId: activeData.cardId,
+                    toListId: overData.listId,
+                })
+            );
 
-
-        // dispatch(moveCard({ cardId: active.id as string, toListId: over.id as string }));
-        dispatch(addActivity({ id: Date.now().toString(), message: "Card reordered", timestamp: Date.now() }));
+            dispatch(
+                addActivity({
+                    id: Date.now().toString(),
+                    message: "Card moved to another list",
+                    timestamp: Date.now(),
+                })
+            );
+        }
     };
 
     return (
@@ -453,7 +466,7 @@ export default function BoardView() {
 
                     <DragOverlay>
                         {activeCard ? (
-                            <div className="bg-white rounded-xl p-4 shadow-2xl border-2 border-indigo-400 w-80">
+                            <div className="bg-white rounded-xl p-4 shadow-2xl border-2 border-indigo-400 w-">
                                 <p className="text-sm text-slate-900 font-bold">{activeCard.title}</p>
                             </div>
                         ) : null}

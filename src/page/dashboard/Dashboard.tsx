@@ -183,9 +183,9 @@ function handleNewBoard(){
                         <h1 className="text-3xl font-bold text-slate-900">Workspace Boards</h1>
                         <p className="text-slate-500 mt-1">Manage and track your active projects</p>
                     </div>
-                    <button className="bg-white border border-slate-200 px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm">
+                    {/* <button className="bg-white border border-slate-200 px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm">
                         <span>+</span> New Board
-                    </button>
+                    </button> */}
                 </div>
 
                 {boards.length === 0 ? (
@@ -206,7 +206,7 @@ function handleNewBoard(){
                         {boards.map((board) => (
                             <div
                                 key={board.id}
-                                onClick={() => handleBoardClick(board.id)}
+                                onClick={() => handleBoardClick(Number(board.id))}
                                 className="group cursor-pointer bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300"
                             >
                                 <div className="h-28 bg-slate-200 group-hover:bg-indigo-50/50 transition-colors relative">
@@ -240,7 +240,7 @@ function handleNewBoard(){
                             <div className="w-12 h-12 rounded-full bg-slate-100 group-hover:bg-white flex items-center justify-center mb-4 transition-colors">
                                 <span className="text-2xl text-slate-400 group-hover:text-indigo-600">+</span>
                             </div>
-                                <Button className="text-slate-600 font-lato  bg-indigo-500 group-hover:bg-indigo-600" onClick={handleNewBoard}>New Board</Button>
+                                <Button className="text-slate-600 font-lato mt-7 bg-indigo-500 group-hover:bg-indigo-600" onClick={handleNewBoard}>New Board</Button>
                         </div>
                     </div>
                 )}

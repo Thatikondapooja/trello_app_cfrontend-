@@ -2,12 +2,12 @@ import api from "./api";
 
 export const createCardApi = (data: {
     title: string;
-    listId: string;
+    listId: number;
 }) => {
     return api.post("/cards", data);
 };
 
-export const fetchCardsByListApi = (listId: string) => {
+export const fetchCardsByListApi = (listId: number) => {
     return api.get(`/cards/list/${listId}`);
 };
 
