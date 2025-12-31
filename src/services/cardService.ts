@@ -18,4 +18,12 @@ export const moveCardApi = (data: {
     return api.patch(`/cards/${data.cardId}/move`, {
         toListId: data.toListId,
     });
-};
+}
+    export const saveCardOrderApi = (data: {
+        listId: number;
+        orderedCardIds: number[];
+    }) => {
+        return api.patch("/cards/reorder", data);
+    };
+
+

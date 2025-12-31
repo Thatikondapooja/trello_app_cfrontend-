@@ -6,7 +6,6 @@ import BoardView from "../features/auth/board/BoardView";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import CreateBoard from "../CreateBoard";
-import ResumeView from "../resume";
 
 
 const AppRoutes = () => {
@@ -35,7 +34,6 @@ const AppRoutes = () => {
 
                 <Route path="/board/create" element={<CreateBoard/>}/>
                 
-                <Route path="/ResumeView" element={<ResumeView />} />
 
             </Routes>
         </BrowserRouter>

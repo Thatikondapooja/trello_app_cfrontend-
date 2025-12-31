@@ -265,7 +265,8 @@ import ListColumn from "../../../component/kanban/ListCloumns";
 import ActivityDetailes from "../../../component/activity/ActivityDetails";
 import { createList, fetchLists } from "../list/listThunks";
 import { createCard, fetchCardsByList, moveCardThunk } from "../card/cardThunks";
-
+import { arrayMove } from "@dnd-kit/sortable";
+import { reorderCards } from "../card/cardSlice";
 export default function BoardView() {
     const dispatch = useAppDispatch();
     const [listTitle, setListTitle] = useState("");
@@ -362,37 +363,59 @@ export default function BoardView() {
         if (card) setActiveCard(card);
     };
 
+    
+
+
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         setActiveCard(null);
 
         if (!over) return;
 
-        const activeData = active.data.current;
-        const overData = over.data.current;
+        // dragged card
+        const activeCard = cards.find((c) => c.id === active.id);
+        if (!activeCard) return;
 
-        // ✅ Only allow CARD → LIST drop
-        if (
-            activeData?.type === "CARD" &&
-            overData?.type === "LIST" &&
-            activeData.listId !== overData.listId
-        ) {
+        const fromListId = activeCard.listId;
+
+        // destination list (from droppable metadata)
+        const toListId =
+            over.data.current?.listId ??
+            cards.find((c) => c.id === over.id)?.listId;
+
+        if (!toListId) return;
+
+        // 🔁 SAME LIST → REORDER
+        if (fromListId === toListId) {
             dispatch(
-                moveCardThunk({
-                    cardId: activeData.cardId,
-                    toListId: overData.listId,
+                reorderCards({
+                    listId: fromListId,
+                    activeId: active.id,
+                    overId: over.id,
                 })
             );
-
-            dispatch(
-                addActivity({
-                    id: Date.now().toString(),
-                    message: "Card moved to another list",
-                    timestamp: Date.now(),
-                })
-            );
+            return;
         }
+
+        // ➡️ DIFFERENT LIST → MOVE (backend)
+        dispatch(
+            moveCardThunk({
+                cardId: active.id,
+                toListId,
+            })
+        );
+
+        dispatch(
+            addActivity({
+                id: Date.now().toString(),
+                message: "Card moved",
+                timestamp: Date.now(),
+            })
+        );
     };
+
+    
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col h-screen overflow-hidden">
@@ -475,4 +498,8 @@ export default function BoardView() {
             </main>
         </div>
     );
+}
+
+function saveCardOrder(arg0: { listId: number; orderedCardIds: number[]; }): any {
+    throw new Error("Function not implemented.");
 }

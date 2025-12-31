@@ -3,6 +3,7 @@ import {
     createCardApi,
     fetchCardsByListApi,
     moveCardApi,
+    saveCardOrderApi,
 } from "../../../services/cardService";
 import api from "../../../services/api";
 
@@ -48,4 +49,17 @@ export const moveCardThunk = createAsyncThunk(
             return rejectWithValue("Failed to move card");
         }
     }
+
 );
+
+export const saveCardOrder = createAsyncThunk(
+    "card/saveOrder",
+    async (payload, { rejectWithValue }) => {
+        try {
+            await saveCardOrderApi(payload);
+        } catch {
+            return rejectWithValue("Failed to save order");
+        }
+    }
+);
+

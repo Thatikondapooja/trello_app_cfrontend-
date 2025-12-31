@@ -15,7 +15,7 @@ interface ListColumnProps {
     onAddCard: (listId: number) => void;
 }
 
-export default function ListColumn({
+export default function ListCloumns({
     listId,
     title,
     cards,
