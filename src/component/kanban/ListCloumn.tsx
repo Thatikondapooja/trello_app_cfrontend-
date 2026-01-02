@@ -38,7 +38,9 @@ export default function ListColumn({
             >
                 <div className="flex flex-col gap-2">
                     {cards.map((card) => (
-                        <TaskCard key={card.id} card={card} />
+                        <TaskCard key={card.id} card={card} onClick={function (id: number): void {
+                            throw new Error("Function not implemented.");
+                        } } />
                     ))}
                 </div>
             </SortableContext>

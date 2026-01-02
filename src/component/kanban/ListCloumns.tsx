@@ -13,6 +13,7 @@ interface ListColumnProps {
     cardTitles: Record<string, string>;
     setCardTitles: Dispatch<SetStateAction<Record<string, string>>>;
     onAddCard: (listId: number) => void;
+    onCardClick: (cardId: number) => void;
 }
 
 export default function ListCloumns({
@@ -22,6 +23,7 @@ export default function ListCloumns({
     cardTitles,
     setCardTitles,
     onAddCard,
+    
 }: ListColumnProps) {
     const [showAddCard, setShowAddCard] = useState(false);
 
@@ -33,6 +35,10 @@ export default function ListCloumns({
             listId,
         },
     });
+
+    function onCardClick(id: number): void {
+        throw new Error("Function not implemented.");
+    }
 
     return (
         <div
@@ -49,6 +55,7 @@ export default function ListCloumns({
                     <TaskCard
                         key={card.id}
                         card={card}
+                        onClick={onCardClick}
                     />
                 ))}
             </div>

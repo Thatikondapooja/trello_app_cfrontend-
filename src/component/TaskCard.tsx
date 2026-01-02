@@ -2,7 +2,12 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Card } from "../features/auth/card/types";
 
-export default function TaskCard({ card }: { card: Card }) {
+interface Props {
+    card: Card;
+    onClick: (id: number) => void;
+}
+
+export default function TaskCard({ card, onClick }: Props) {
     const {
         setNodeRef,
         attributes,
@@ -10,7 +15,7 @@ export default function TaskCard({ card }: { card: Card }) {
         transform,
         transition,
     } = useSortable({
-        id: card.id, // 🔥 IMPORTANT: pure ID, not `card-${id}`
+        id: card.id,
         data: {
             type: "CARD",
             cardId: card.id,
@@ -29,7 +34,8 @@ export default function TaskCard({ card }: { card: Card }) {
             style={style}
             {...attributes}
             {...listeners}
-            className="bg-white p-3 rounded-lg shadow cursor-grab active:cursor-grabbing"
+            onClick={() => onClick(card.id)}   // ✅ THIS WAS MISSING
+            className="bg-white p-3 rounded-lg shadow cursor-pointer hover:bg-slate-50"
         >
             {card.title}
         </div>

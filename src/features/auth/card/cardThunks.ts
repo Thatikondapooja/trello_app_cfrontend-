@@ -1,4 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { SaveCardOrderPayload } from "./types";
+
 import {
     createCardApi,
     fetchCardsByListApi,
@@ -39,7 +41,7 @@ export const fetchCardsByList = createAsyncThunk(
 export const moveCardThunk = createAsyncThunk(
     "card/move",
     async (
-        payload: { cardId: string; toListId: string },
+        payload: { cardId: number; toListId: string },
         { rejectWithValue }
     ) => {
         try {
@@ -52,14 +54,24 @@ export const moveCardThunk = createAsyncThunk(
 
 );
 
-export const saveCardOrder = createAsyncThunk(
+export const saveCardOrder = createAsyncThunk<
+    void, // ✅ return type
+    SaveCardOrderPayload // ✅ payload type (IMPORTANT)
+>(
     "card/saveOrder",
     async (payload, { rejectWithValue }) => {
         try {
-            await saveCardOrderApi(payload);
+            await saveCardOrderApi(payload); // ✅ payload is now typed
         } catch {
             return rejectWithValue("Failed to save order");
         }
     }
 );
 
+export const fetchCardById = createAsyncThunk(
+    "card/fetchById",
+    async (cardId: number) => {
+        const res = await api.get(`/cards/${cardId}`);
+        return res.data;
+    }
+);

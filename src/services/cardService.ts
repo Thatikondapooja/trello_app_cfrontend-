@@ -12,7 +12,7 @@ export const fetchCardsByListApi = (listId: number) => {
 };
 
 export const moveCardApi = (data: {
-    cardId: string;
+    cardId: number;
     toListId: string;
 }) => {
     return api.patch(`/cards/${data.cardId}/move`, {

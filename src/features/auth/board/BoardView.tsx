@@ -264,9 +264,10 @@ import Button from "../../../components/comman/Button";
 import ListColumn from "../../../component/kanban/ListCloumns";
 import ActivityDetailes from "../../../component/activity/ActivityDetails";
 import { createList, fetchLists } from "../list/listThunks";
-import { createCard, fetchCardsByList, moveCardThunk } from "../card/cardThunks";
+import { createCard, fetchCardById, fetchCardsByList, moveCardThunk } from "../card/cardThunks";
 import { arrayMove } from "@dnd-kit/sortable";
-import { reorderCards } from "../card/cardSlice";
+import { clearSelectedCard, reorderCards } from "../card/cardSlice";
+import CardDetailsModal from "../card/CardDetailsModel";
 export default function BoardView() {
     const dispatch = useAppDispatch();
     const [listTitle, setListTitle] = useState("");
@@ -391,8 +392,8 @@ export default function BoardView() {
             dispatch(
                 reorderCards({
                     listId: fromListId,
-                    activeId: active.id,
-                    overId: over.id,
+                    activeId: Number(active.id),
+                    overId: Number(over.id),
                 })
             );
             return;
@@ -401,7 +402,7 @@ export default function BoardView() {
         // ➡️ DIFFERENT LIST → MOVE (backend)
         dispatch(
             moveCardThunk({
-                cardId: active.id,
+                cardId: Number(active.id),
                 toListId,
             })
         );
@@ -415,7 +416,13 @@ export default function BoardView() {
         );
     };
 
-    
+    const selectedCard = useAppSelector(state => state.card.selectedCard);
+    console.log("selectedCard", selectedCard)
+
+    const handleCardClick = (cardId: number) => {
+        dispatch(fetchCardById(cardId));
+    };
+
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col h-screen overflow-hidden">
@@ -458,6 +465,8 @@ export default function BoardView() {
                             cardTitles={cardTitles}
                             setCardTitles={setCardTitles}
                             onAddCard={handleAddCard}
+                            onCardClick={handleCardClick}   // ✅ THIS WAS MISSING
+
                         />
                     ))}
 
@@ -496,10 +505,15 @@ export default function BoardView() {
                     </DragOverlay>
                 </DndContext>
             </main>
+
+            {selectedCard && (
+                <CardDetailsModal
+                    card={selectedCard}
+                    onClose={() => dispatch(clearSelectedCard())}
+                />
+            )}
+
         </div>
     );
 }
 
-function saveCardOrder(arg0: { listId: number; orderedCardIds: number[]; }): any {
-    throw new Error("Function not implemented.");
-}
