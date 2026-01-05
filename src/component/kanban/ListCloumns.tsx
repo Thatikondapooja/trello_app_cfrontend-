@@ -16,14 +16,14 @@ interface ListColumnProps {
     onCardClick: (cardId: number) => void;
 }
 
-export default function ListCloumns({
+export default function ListCloumn({
     listId,
     title,
     cards,
     cardTitles,
     setCardTitles,
     onAddCard,
-    
+    onCardClick
 }: ListColumnProps) {
     const [showAddCard, setShowAddCard] = useState(false);
 
@@ -36,9 +36,7 @@ export default function ListCloumns({
         },
     });
 
-    function onCardClick(id: number): void {
-        throw new Error("Function not implemented.");
-    }
+  
 
     return (
         <div
@@ -55,10 +53,12 @@ export default function ListCloumns({
                     <TaskCard
                         key={card.id}
                         card={card}
-                        onClick={onCardClick}
+                        onClick={() => onCardClick(card.id)} // ✅ IMPORTANT
                     />
                 ))}
             </div>
+
+
 
             {/* ADD CARD */}
             {showAddCard ? (

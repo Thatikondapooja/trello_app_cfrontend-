@@ -1,3 +1,4 @@
+import { Card } from "../features/auth/card/types";
 import api from "./api";
 
 export const createCardApi = (data: {
@@ -27,3 +28,5 @@ export const moveCardApi = (data: {
     };
 
 
+export const updateCardApi = (id: number, payload: Partial<Card>) =>
+    api.patch(`/cards/${id}`, payload);

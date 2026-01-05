@@ -286,10 +286,10 @@ export default function BoardView() {
         )
     );
 
-    console.log("lists", lists)
+    console.log("lists ", lists)
 
     const cards = useAppSelector((state) => state.card.cards);
-    console.log("cards", cards)
+    console.log("cards from board", cards)
 
 
     useEffect(() => {
@@ -420,7 +420,9 @@ export default function BoardView() {
     console.log("selectedCard", selectedCard)
 
     const handleCardClick = (cardId: number) => {
+    
         dispatch(fetchCardById(cardId));
+       
     };
 
 

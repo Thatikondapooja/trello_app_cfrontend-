@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { SaveCardOrderPayload } from "./types";
+import { Card, SaveCardOrderPayload } from "./types";
 
 import {
     createCardApi,
     fetchCardsByListApi,
     moveCardApi,
     saveCardOrderApi,
+    updateCardApi,
 } from "../../../services/cardService";
 import api from "../../../services/api";
 
@@ -72,6 +73,24 @@ export const fetchCardById = createAsyncThunk(
     "card/fetchById",
     async (cardId: number) => {
         const res = await api.get(`/cards/${cardId}`);
+        console.log("res fetchById", res)
         return res.data;
     }
 );
+
+export const updateCard = createAsyncThunk(
+    "card/update",
+    async (
+        payload: { id: number; data: Partial<Card> },
+        { rejectWithValue }
+    ) => {
+        try {
+            const res = await updateCardApi(payload.id, payload.data);
+            console.log("res", res)
+            return res.data;
+        } catch {
+            return rejectWithValue("Failed to update card");
+        }
+    }
+);
+

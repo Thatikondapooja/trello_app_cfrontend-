@@ -37,6 +37,7 @@ const AppRoutes = () => {
 
             </Routes>
         </BrowserRouter>
+       
     );
 };
 

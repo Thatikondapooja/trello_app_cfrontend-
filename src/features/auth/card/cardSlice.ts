@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createCard, fetchCardById, fetchCardsByList, moveCardThunk } from "./cardThunks";
+import { createCard, fetchCardById, fetchCardsByList, moveCardThunk, updateCard } from "./cardThunks";
 import { arrayMove } from "@dnd-kit/sortable";
 
 interface Card {
@@ -7,9 +7,11 @@ interface Card {
     title: string;
     description: string | null;
     dueDate: string | null;
-    labels: string[];
+    labels: { name: string; color: string }[]; // ✅ FIX
+    reminderMinutes:number|null;
     listId: number;
     position: number;
+    
 }
 
 
@@ -66,10 +68,21 @@ const cardSlice = createSlice({
         // 🧾 CARD DETAILS MODAL
         setSelectedCard(state, action: PayloadAction<Card>) {
             state.selectedCard = action.payload;
+            console.log("setSelectedCard", setSelectedCard)
         },
         clearSelectedCard(state) {
             state.selectedCard = null;
         },
+
+
+        // updateCard: (state, action) => {
+        //     const { cardId, updatedData } = action.payload;
+
+        //     state.addProjects = state.addProjects.map((p) =>
+        //         p.projectId === projectId ? { ...p, ...updatedData } : p
+        //     );
+        // },
+
     },
 
     extraReducers: (builder) => {
@@ -89,7 +102,7 @@ const cardSlice = createSlice({
                             labels: card.labels,
                             listId,
                             position: card.position,
-
+                            reminderMinutes: card.reminderMinutes
                         });
                     }
                 });
@@ -107,12 +120,35 @@ const cardSlice = createSlice({
                     labels: card.labels,
                     listId: card.list.id,
                     position: card.position,
+                    reminderMinutes: card.reminderMinutes
+
                 });
             })
 
             .addCase(fetchCardById.fulfilled, (state, action) => {
                 state.selectedCard = action.payload;
             })
+
+
+
+            .addCase(updateCard.fulfilled, (state, action) => {
+                const updated = action.payload;
+
+                // Update selectedCard (modal)
+                if (state.selectedCard?.id === updated.id) {
+                    state.selectedCard = updated;
+                }
+
+                // Update card inside board list
+                const index = state.cards.findIndex(c => c.id === updated.id);
+                if (index !== -1) {
+                    state.cards[index] = {
+                        ...state.cards[index],
+                        ...updated,
+                    };
+                }
+            })
+
 
             /* MOVE BETWEEN LISTS */
             .addCase(moveCardThunk.fulfilled, (state, action) => {
@@ -128,7 +164,9 @@ const cardSlice = createSlice({
             
     },
     
+    
 });
+
 
 
 export const {

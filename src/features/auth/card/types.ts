@@ -1,11 +1,20 @@
+import { Interface } from "node:readline";
+
+export  interface Label{
+name:string;
+color:string;
+}
+
+
 export interface Card {
     id: number;
     title: string;
     description: string | null;
     dueDate: string | null;
-    labels: string[];
+    labels: Label[];
     listId: number;
     position: number;
+    reminderMinutes: number | null;
 }
 
 

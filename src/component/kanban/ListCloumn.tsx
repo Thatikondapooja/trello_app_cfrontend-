@@ -10,6 +10,8 @@ interface Props {
     cardTitles: Record<number, string>;
     setCardTitles: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     onAddCard: (listId: number) => void;
+    onCardClick: (cardId: number) => void;
+
 }
 
 export default function ListColumn({
@@ -19,6 +21,7 @@ export default function ListColumn({
     cardTitles,
     setCardTitles,
     onAddCard,
+    onCardClick,
 }: Props) {
     const { setNodeRef } = useDroppable({
         id: listId,
@@ -38,9 +41,8 @@ export default function ListColumn({
             >
                 <div className="flex flex-col gap-2">
                     {cards.map((card) => (
-                        <TaskCard key={card.id} card={card} onClick={function (id: number): void {
-                            throw new Error("Function not implemented.");
-                        } } />
+                        <TaskCard key={card.id} card={card} onClick={onCardClick
+                        } />
                     ))}
                 </div>
             </SortableContext>
