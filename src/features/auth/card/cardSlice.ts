@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createCard, fetchCardById, fetchCardsByList, moveCardThunk, updateCard } from "./cardThunks";
+import { completeCard, createCard, fetchCardById, fetchCardsByList, moveCardThunk, updateCard } from "./cardThunks";
 import { arrayMove } from "@dnd-kit/sortable";
 
 interface Card {
@@ -11,6 +11,8 @@ interface Card {
     reminderMinutes:number|null;
     listId: number;
     position: number;
+    isCompleted:boolean;
+    reminderSent:boolean;
     
 }
 
@@ -102,7 +104,9 @@ const cardSlice = createSlice({
                             labels: card.labels,
                             listId,
                             position: card.position,
-                            reminderMinutes: card.reminderMinutes
+                            reminderMinutes: card.reminderMinutes,
+                            isCompleted: card.isCompleted,
+                            reminderSent: card.reminderSent
                         });
                     }
                 });
@@ -120,7 +124,9 @@ const cardSlice = createSlice({
                     labels: card.labels,
                     listId: card.list.id,
                     position: card.position,
-                    reminderMinutes: card.reminderMinutes
+                    reminderMinutes: card.reminderMinutes,
+                    isCompleted: card.isCompleted,
+                    reminderSent: card.reminderSent
 
                 });
             })
@@ -148,6 +154,19 @@ const cardSlice = createSlice({
                     };
                 }
             })
+
+            .addCase(completeCard.fulfilled, (state, action) => {
+                const card = state.cards.find(c => c.id === action.payload.id);
+                if (card) {
+                    card.isCompleted = true;
+                    card.reminderSent = true;
+                }
+
+                if (state.selectedCard && state.selectedCard.id === action.payload.id) {
+                    state.selectedCard.isCompleted = true;
+                }
+            })
+
 
 
             /* MOVE BETWEEN LISTS */

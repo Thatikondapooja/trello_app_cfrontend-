@@ -15,6 +15,7 @@ export interface Card {
     listId: number;
     position: number;
     reminderMinutes: number | null;
+    isCompleted:boolean;
 }
 
 

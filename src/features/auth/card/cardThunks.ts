@@ -94,3 +94,12 @@ export const updateCard = createAsyncThunk(
     }
 );
 
+export const completeCard = createAsyncThunk(
+    "card/complete",
+    async (cardId: number) => {
+        const res = await api.patch(`/cards/${cardId}/complete`);
+        console.log("res", res)
+        return res.data;
+    }
+);
+

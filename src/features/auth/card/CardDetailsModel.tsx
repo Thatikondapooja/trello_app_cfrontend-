@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Card } from "./types";
-import { updateCard } from "./cardThunks";
+import { completeCard, updateCard } from "./cardThunks";
 import { useAppDispatch } from "../../../app/hooks";
+import { addActivity } from "../../activity/activitySlice";
 
 /* 🔹 Tailwind-safe color map */
 const LABEL_COLORS: Record<string, string> = {
@@ -30,10 +31,7 @@ export default function CardDetailsModal({ card, onClose }: Props) {
 
     const [description, setDescription] = useState(card.description ?? "");
     const [dueDate, setDueDate] = useState<string>(card.dueDate ?? "");
-    const [reminderMinutes, setReminderMinutes] = useState<number>(
-        card.reminderMinutes ?? 0
-    );
-
+    const [reminderMinutes, setReminderMinutes] = useState<number>(card.reminderMinutes ?? 0 );
     const [labels, setLabels] = useState<{ name: string; color: string }[] >(card.labels ?? []);
 
     useEffect(() => {
@@ -49,6 +47,14 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                 data: { description },
             }));
         }
+
+         dispatch(
+                    addActivity({
+                        id: Date.now().toString(),
+                        message: "Description added to a card",
+                        timestamp: Date.now(),
+                    })
+                );
     };
 
     /*  Update due date */
@@ -57,6 +63,15 @@ export default function CardDetailsModal({ card, onClose }: Props) {
             id: card.id,
             data: { dueDate: dueDate || null },
         }));
+
+
+        dispatch(
+            addActivity({
+                id: Date.now().toString(),
+                message: `due date added to a card`,
+                timestamp: Date.now(),
+            })
+        );
     };
 
     /*  Toggle label (Trello-style) */
@@ -73,6 +88,14 @@ export default function CardDetailsModal({ card, onClose }: Props) {
             id: card.id,
             data: { labels: updated },
         }));
+
+        dispatch(
+            addActivity({
+                id: Date.now().toString(),
+                message: "label are added to a card",
+                timestamp: Date.now(),
+            })
+        );
     };
 
     return (
@@ -128,8 +151,16 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                     <option value={0}>No reminder</option>
                     <option value={1440}>1 day before</option>
                     <option value={60}>1 hour before</option>
-                    <option value={10}>10 minutes before</option>
+                    <option value={1}>1 minutes before</option>
                 </select>
+                <label className="flex items-center gap-2 mt-4">
+                    <input
+                        type="checkbox"
+                        checked={card.isCompleted}
+                        onChange={() => dispatch(completeCard(card.id))}
+                    />
+                    Mark as complete
+                </label>
 
 
 

@@ -69,6 +69,19 @@ export default function TaskCard({ card, onClick }: Props) {
                     </span>
                 ))}
             </div>
+            {card.dueDate && (
+                <span
+                    className={`text-xs px-2 py-1 rounded text-white ${card.isCompleted
+                            ? "bg-green-500"
+                            : new Date(card.dueDate) < new Date()
+                                ? "bg-red-500"
+                                : "bg-slate-400"
+                        }`}
+                >
+                    {card.isCompleted ? "Completed" : "Due"}
+                </span>
+            )}
+
 
             </div>
 
