@@ -2,6 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { Card } from "../features/auth/card/types";
 import { Clock } from "lucide-react";
 import { formatDueDate } from "../utils/FormateDate";
+import Checklist from "../features/checklists/checklist";
 
 interface Props{
     card: Card;
@@ -81,6 +82,8 @@ export default function TaskCard({ card, onClick }: Props) {
                     {card.isCompleted ? "Completed" : "Due"}
                 </span>
             )}
+
+         
 
 
             </div>

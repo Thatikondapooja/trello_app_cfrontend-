@@ -4,7 +4,7 @@ import { completeCard, updateCard } from "./cardThunks";
 import { useAppDispatch } from "../../../app/hooks";
 import { addActivity } from "../../activity/activitySlice";
 
-/* 🔹 Tailwind-safe color map */
+/* Label colors */
 const LABEL_COLORS: Record<string, string> = {
     red: "bg-red-500",
     orange: "bg-orange-500",
@@ -30,72 +30,45 @@ export default function CardDetailsModal({ card, onClose }: Props) {
     const dispatch = useAppDispatch();
 
     const [description, setDescription] = useState(card.description ?? "");
-    const [dueDate, setDueDate] = useState<string>(card.dueDate ?? "");
-    const [reminderMinutes, setReminderMinutes] = useState<number>(card.reminderMinutes ?? 0 );
-    const [labels, setLabels] = useState<{ name: string; color: string }[] >(card.labels ?? []);
+    const [dueDate, setDueDate] = useState(card.dueDate?.slice(0, 10) ?? "");
+    const [dueTime, setDueTime] = useState("18:00");
+    const [reminderMinutes, setReminderMinutes] = useState<number>(
+        card.reminderMinutes ?? 0
+    );
+    const [labels, setLabels] = useState(card.labels ?? []);
 
-    useEffect(() => {
-        setReminderMinutes(card.reminderMinutes ?? 0);
-    }, [card.reminderMinutes]);
-
-    
-    /*  Update description */
-    const handleDescriptionBlur = () => {
-        if (description !== card.description) {
-            dispatch(updateCard({
-                id: card.id,
-                data: { description },
-            }));
-        }
-
-         dispatch(
-                    addActivity({
-                        id: Date.now().toString(),
-                        message: "Description added to a card",
-                        timestamp: Date.now(),
-                    })
-                );
+    /* Save description */
+    const saveDescription = () => {
+        dispatch(updateCard({ id: card.id, data: { description } }));
+        dispatch(addActivity({
+            id: Date.now().toString(),
+            message: "Description updated",
+            timestamp: Date.now(),
+        }));
     };
 
-    /*  Update due date */
-    const handleDueDateBlur = () => {
+    /* Save due date + time */
+    const saveDueDate = () => {
+        if (!dueDate) return;
+
         dispatch(updateCard({
             id: card.id,
-            data: { dueDate: dueDate || null },
+            data: {
+                dueDate: `${dueDate}T${dueTime}`,
+                reminderMinutes: reminderMinutes === 0 ? null : reminderMinutes,
+            },
         }));
-
-
-        dispatch(
-            addActivity({
-                id: Date.now().toString(),
-                message: `due date added to a card`,
-                timestamp: Date.now(),
-            })
-        );
     };
 
-    /*  Toggle label (Trello-style) */
+    /* Toggle labels */
     const toggleLabel = (label: { name: string; color: string }) => {
         const exists = labels.some(l => l.name === label.name);
-
         const updated = exists
             ? labels.filter(l => l.name !== label.name)
             : [...labels, label];
 
         setLabels(updated);
-
-        dispatch(updateCard({
-            id: card.id,
-            data: { labels: updated },
-        }));
-
-        dispatch(
-            addActivity({
-                id: Date.now().toString(),
-                message: "label are added to a card",
-                timestamp: Date.now(),
-            })
-        );
+        dispatch(updateCard({ id: card.id, data: { labels: updated } }));
     };
 
     return (
@@ -103,57 +76,57 @@ export default function CardDetailsModal({ card, onClose }: Props) {
             <div className="bg-white rounded-xl w-[500px] p-6 shadow-xl">
 
                 {/* Header */}
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-bold">{card.title}</h2>
+                <div className="flex justify-between mb-4">
+                    <h2 className="font-bold">{card.title}</h2>
                     <button onClick={onClose}>✕</button>
                 </div>
 
                 {/* Description */}
                 <textarea
-                    className="w-full border rounded p-2"
-                    placeholder="Add description..."
+                    className="w-full border p-2 rounded"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    onBlur={handleDescriptionBlur}
+                    onBlur={saveDescription}
+                    placeholder="Add description..."
                 />
 
                 {/* Due Date */}
-                <div className="mt-3">
-                    <label className="text-sm font-semibold block mb-1">
-                        Due Date
-                    </label>
+                <div className="flex gap-2 mt-3">
                     <input
                         type="date"
                         value={dueDate}
                         onChange={(e) => setDueDate(e.target.value)}
-                        onBlur={handleDueDateBlur}
-                        className="border rounded px-2 py-1"
+                        className="border px-2 py-1 rounded"
                     />
-                    
+                    <input
+                        type="time"
+                        value={dueTime}
+                        onChange={(e) => setDueTime(e.target.value)}
+                        className="border px-2 py-1 rounded"
+                    />
                 </div>
 
+                {/* Reminder */}
                 <select
-                    className="border rounded px-2 py-1 mt-2"
+                    className="border px-2 py-1 mt-2 rounded"
                     value={reminderMinutes}
-                    onChange={(e) => {
-                        const value = Number(e.target.value); // ✅ get NEW value
-
-                        setReminderMinutes(value); // ✅ update UI
-
-                        dispatch(updateCard({
-                            id: card.id,
-                            data: {
-                                reminderMinutes: value === 0 ? null : value, // ✅ backend format
-                            },
-                        }));
-                    }}
+                    onChange={(e) => setReminderMinutes(Number(e.target.value))}
                 >
                     <option value={0}>No reminder</option>
                     <option value={1440}>1 day before</option>
                     <option value={60}>1 hour before</option>
-                    <option value={1}>1 minutes before</option>
+                    <option value={1}>1 minute before</option>
                 </select>
-                <label className="flex items-center gap-2 mt-4">
+
+                <button
+                    className="mt-2 bg-blue-600 text-white px-3 py-1 rounded"
+                    onClick={saveDueDate}
+                >
+                    Save Due Date
+                </button>
+
+                {/* Complete */}
+                <label className="flex gap-2 mt-4">
                     <input
                         type="checkbox"
                         checked={card.isCompleted}
@@ -162,31 +135,22 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                     Mark as complete
                 </label>
 
-
-
                 {/* Labels */}
-                <h4 className="mt-4 font-semibold text-sm">Labels</h4>
-
+                <h4 className="mt-4 font-semibold">Labels</h4>
                 <div className="flex gap-2 flex-wrap mt-2">
-                    {LABEL_PRESETS.map(label => {
-                        const isActive = labels.some(l => l.name === label.name);
-
-                        return (
-                            <button
-                                key={label.name}
-                                onClick={() => toggleLabel(label)}
-                                className={`
-                                    px-3 py-1 rounded text-xs font-semibold text-white
-                                    ${LABEL_COLORS[label.color]}
-                                    ${isActive ? "opacity-100" : "opacity-40"}
-                                `}
-                            >
-                                {label.name}
-                            </button>
-                        );
-                    })}
+                    {LABEL_PRESETS.map(label => (
+                        <button
+                            key={label.name}
+                            onClick={() => toggleLabel(label)}
+                            className={`${LABEL_COLORS[label.color]} px-3 py-1 text-xs rounded text-white ${labels.some(l => l.name === label.name)
+                                    ? "opacity-100"
+                                    : "opacity-40"
+                                }`}
+                        >
+                            {label.name}
+                        </button>
+                    ))}
                 </div>
-
             </div>
         </div>
     );
