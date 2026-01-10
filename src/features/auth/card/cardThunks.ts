@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Card, SaveCardOrderPayload } from "./types";
+import { BoardCard, SaveCardOrderPayload } from "./types";
 
 import {
     createCardApi,
@@ -81,7 +81,7 @@ export const fetchCardById = createAsyncThunk(
 export const updateCard = createAsyncThunk(
     "card/update",
     async (
-        payload: { id: number; data: Partial<Card> },
+        payload: { id: number; data: Partial<BoardCard> },
         { rejectWithValue }
     ) => {
         try {

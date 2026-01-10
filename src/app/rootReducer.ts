@@ -5,6 +5,7 @@ import listReducer from "../features/auth/list/listSlice";
 import cardReducer from "../features/auth/card/cardSlice";
 import activityReducer from "../features/activity/activitySlice";
 import checklistReducer from "../features/checklists/checklistSlice";
+import memberReducer from "../features/member/memberSlice";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -13,6 +14,8 @@ const rootReducer = combineReducers({
     card: cardReducer,
     activity: activityReducer,
     checklist: checklistReducer,
+    members: memberReducer,
+
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

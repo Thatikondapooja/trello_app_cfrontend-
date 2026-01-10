@@ -1,12 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { toggleChecklistItem } from "./checklistThunk";
+import {
+    createChecklist,
+    addChecklistItem,
+    toggleChecklistItem,
+    deleteChecklist,
+} from "./checklistThunk";
 
 interface ChecklistState {
-    items: any[];
+    checklists: any[];
 }
 
 const initialState: ChecklistState = {
-    items: [],
+    checklists: [],
 };
 
 const checklistSlice = createSlice({
@@ -14,17 +19,51 @@ const checklistSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(toggleChecklistItem.fulfilled, (state, action) => {
-            const updatedItem = action.payload;
+        builder
 
-            const index = state.items.findIndex(
-                (i) => i.id === updatedItem.id
-            );
+            /* ✅ CREATE CHECKLIST */
+            .addCase(createChecklist.fulfilled, (state, action) => {
+                state.checklists.push(action.payload);
+            })
 
-            if (index !== -1) {
-                state.items[index] = updatedItem;
-            }
-        });
+            /* ✅ ADD CHECKLIST ITEM */
+            .addCase(addChecklistItem.fulfilled, (state, action) => {
+                const item = action.payload;
+                const checklistId = item.checklist.id;
+
+                const checklist = state.checklists.find(
+                    (c) => c.id === checklistId
+                );
+
+                if (checklist) {
+                    checklist.items.push(item);
+                }
+            })
+
+            /* ✅ TOGGLE CHECKLIST ITEM */
+            .addCase(toggleChecklistItem.fulfilled, (state, action) => {
+                const updatedItem = action.payload;
+
+                for (const checklist of state.checklists) {
+                    const item = checklist.items.find(
+                        (i:any) => i.id === updatedItem.id
+                    );
+
+                    if (item) {
+                        item.isCompleted = updatedItem.isCompleted;
+                        break;
+                    }
+                }
+            })
+
+            .addCase(deleteChecklist.fulfilled, (state, action) => {
+                const checklistId = action.payload;
+
+                state.checklists = state.checklists.filter(
+                    (c) => c.id !== checklistId
+                );
+            });
+
     },
 });
 

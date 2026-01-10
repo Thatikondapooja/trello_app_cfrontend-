@@ -1,12 +1,12 @@
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { Card } from "../../features/auth/card/types";
+import { BoardCard } from "../../features/auth/card/types";
 import TaskCard from "../TaskCard";
 
 interface Props {
     listId: number;
     title: string;
-    cards: Card[];
+    cards: BoardCard[];
     cardTitles: Record<number, string>;
     setCardTitles: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     onAddCard: (listId: number) => void;

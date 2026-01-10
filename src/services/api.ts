@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:5000", // NestJS backend
+    baseURL: process.env.REACT_APP_API_URL, // NestJS backend
     withCredentials: true,
 });
+console.log("API BASE URL:", process.env.REACT_APP_API_URL);
 
 /* ---------------- REQUEST INTERCEPTOR ---------------- */
 api.interceptors.request.use(
@@ -33,10 +34,7 @@ api.interceptors.response.use(
             try {
                 const refreshToken = localStorage.getItem("refresh_token");
 
-                const res = await axios.post(
-                    "http://localhost:5000/auth/refresh",
-                    { refreshToken }
-                );
+               const res= await axios.post(`${process.env.REACT_APP_API_URL}/auth/refresh`, { refreshToken });
 
                 const newAccessToken = res.data.accessToken;
 

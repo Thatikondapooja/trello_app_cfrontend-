@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { Card } from "./types";
+import { BoardCard } from "./types";
 import { completeCard, updateCard } from "./cardThunks";
 import { useAppDispatch } from "../../../app/hooks";
 import { addActivity } from "../../activity/activitySlice";
+import Checklist from "../../checklists/checklist";
+import { createChecklist } from "../../checklists/checklistThunk";
+import { FullCard } from "./types";
+import checklist from "../../checklists/checklist";
+import CardMembers from "./CardMembers";
 
 /* Label colors */
 const LABEL_COLORS: Record<string, string> = {
@@ -21,8 +26,9 @@ const LABEL_PRESETS = [
     { name: "Low Priority", color: "gray" },
 ];
 
+
 interface Props {
-    card: Card;
+    card: FullCard;
     onClose: () => void;
 }
 
@@ -37,6 +43,10 @@ export default function CardDetailsModal({ card, onClose }: Props) {
     );
     const [labels, setLabels] = useState(card.labels ?? []);
 
+
+    const [showChecklistInput, setShowChecklistInput] = useState(false);
+    const [checklistTitle, setChecklistTitle] = useState("");
+
     /* Save description */
     const saveDescription = () => {
         dispatch(updateCard({ id: card.id, data: { description } }));
@@ -47,6 +57,7 @@ export default function CardDetailsModal({ card, onClose }: Props) {
         }));
     };
 
+    
     /* Save due date + time */
     const saveDueDate = () => {
         if (!dueDate) return;
@@ -69,16 +80,39 @@ export default function CardDetailsModal({ card, onClose }: Props) {
 
         setLabels(updated);
         dispatch(updateCard({ id: card.id, data: { labels: updated } }));
+
+
+       
     };
 
+    function addCheckList() {
+
+        if (!checklistTitle){
+            return false;
+        }
+        dispatch(createChecklist({
+            cardId: card.id,
+            title: checklistTitle,
+        }));
+        setChecklistTitle("");
+        setShowChecklistInput(false);
+    }
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl w-[500px] p-6 shadow-xl">
+            <div className="bg-white rounded-xl w-[500px] p-6 shadow-xl  gap-5">
 
                 {/* Header */}
                 <div className="flex justify-between mb-4">
-                    <h2 className="font-bold">{card.title}</h2>
-                    <button onClick={onClose}>✕</button>
+                    <label className="flex gap-2 mt-4">
+                        <input
+                            type="checkbox"
+                            checked={card.isCompleted}
+                            onChange={() => dispatch(completeCard(card.id))}
+                        />
+                    
+                 
+                        <h2 className="font-bold">{card.title}</h2> </label>
+                        <button className="ml-44" onClick={onClose}>✕</button>  
                 </div>
 
                 {/* Description */}
@@ -119,21 +153,64 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                 </select>
 
                 <button
-                    className="mt-2 bg-blue-600 text-white px-3 py-1 rounded"
+                    className="mt-2 text-sm bg-indigo-50 text-gray-600 ml-3 px-3 py-1 rounded"
                     onClick={saveDueDate}
                 >
                     Save Due Date
                 </button>
 
+                {/* <button
+                    className="mt-4 text-sm text-red-600"
+                    onClick={() =>
+                        dispatch(createChecklist({
+                            cardId: card.id,
+                            title: "Checklist",
+                          
+                        }))
+                    }
+                >
+                    + Add checklist
+                </button> */}
+                <button
+                    className="mt-2 relative text-sm  bg-indigo-50 text-gray-600 ml-4 px-3 py-1  rounded-md  "
+                    onClick={() => setShowChecklistInput(true)}
+                >
+                    + Add checklist
+                </button>
+
+                {showChecklistInput && (
+                    <div className="md:mt-4 fixed left-40 mt-52 bg-blue-200 md:bg-indigo-50 top-72 md:left-[55%]   inset-0 gap-2 w-44 px-2 md:h-[15%]  h-[9%] border rounded-md ">
+                        <div className="mt-3  gap-2 ">
+                            <input
+                                className="border text-xs px-2 py-1 rounded w-full"
+                                placeholder="Checklist title"
+                                value={checklistTitle}
+                                onChange={(e) => setChecklistTitle(e.target.value)}
+                            />
+                            <div className="flex gap-9">
+                                <div>
+                                    <button
+                                        className="bg-blue-500 text-xs text-white px-3 py-1 ml-2 mt-2 rounded"
+                                        onClick={addCheckList}>Add </button>
+
+                                </div>
+                                <div><button className="text-xl ml-9" onClick={() => setShowChecklistInput(false)}>×</button></div>
+
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* Complete */}
-                <label className="flex gap-2 mt-4">
+                {/* <label className="flex gap-2 mt-4">
                     <input
                         type="checkbox"
                         checked={card.isCompleted}
                         onChange={() => dispatch(completeCard(card.id))}
                     />
                     Mark as complete
-                </label>
+                </label> */}
+
+              
 
                 {/* Labels */}
                 <h4 className="mt-4 font-semibold">Labels</h4>
@@ -142,7 +219,7 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                         <button
                             key={label.name}
                             onClick={() => toggleLabel(label)}
-                            className={`${LABEL_COLORS[label.color]} px-3 py-1 text-xs rounded text-white ${labels.some(l => l.name === label.name)
+                            className={`${LABEL_COLORS[label.color]} mt-2 px-3 py-1 text-xs rounded text-white ${labels.some(l => l.name === label.name)
                                     ? "opacity-100"
                                     : "opacity-40"
                                 }`}
@@ -151,7 +228,34 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                         </button>
                     ))}
                 </div>
+                
+                {/* CHECKLISTS SECTION */}
+                {(card.checklists ?? []).length === 0 && (
+                    <p className="text-sm text-gray-400 mt-3">
+                        No checklists yet
+                    </p>
+                )}
+                <div className="p-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                    {card.checklists?.map((checklist) => (
+                        <Checklist key={checklist.id} checklist={checklist} />
+                    ))}
+                </div>
+
+                {card.list?.board?.id && (
+                    <CardMembers
+                        cardId={card.id}
+                        boardId={card.list.board.id}
+                        cardMembers={card.members ?? []}
+                    />
+                )}
+
+
             </div>
+
+           
+
+
+          
         </div>
     );
 }

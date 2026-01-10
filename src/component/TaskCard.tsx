@@ -1,11 +1,12 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { Card } from "../features/auth/card/types";
+import { BoardCard } from "../features/auth/card/types";
 import { Clock } from "lucide-react";
 import { formatDueDate } from "../utils/FormateDate";
 import Checklist from "../features/checklists/checklist";
+import { completeCard } from "../features/auth/card/cardThunks";
 
 interface Props{
-    card: Card;
+    card: BoardCard;
     onClick: (id: number) => void;
 }
 
@@ -59,7 +60,17 @@ export default function TaskCard({ card, onClick }: Props) {
                 </p>
             )}
 
-           
+            <div className="flex gap-1 flex-wrap mt-1">
+                {card.isCompleted&&
+                    <span
+                        
+                        className={`px-2 py-0.5 text-xs rounded text-white bg-green-500`}
+                    >
+                      completed
+                    </span>
+                }
+            </div>
+
             <div className="flex gap-1 flex-wrap mt-1">
                 {card.labels.map(label => (
                     <span

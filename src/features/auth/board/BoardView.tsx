@@ -364,10 +364,6 @@ export default function BoardView() {
         if (card) setActiveCard(card);
     };
 
-    
-
-
-
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         setActiveCard(null);
@@ -438,8 +434,8 @@ export default function BoardView() {
                             </svg>
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold text-slate-900 leading-none">Project Workspace</h1>
-                            <p className="text-xs text-slate-500 mt-1 uppercase tracking-widest font-semibold">{lists.length} Columns</p>
+                            <h1 className="md:text-xl text-xs  font-bold text-slate-900 leading-none">Project Workspace</h1>
+                            <p className="md:text-xs text-slate-500 mt-1 uppercase tracking-widest font-semibold">{lists.length} Columns</p>
                         </div>
                     </div>
                 </div>
@@ -456,7 +452,7 @@ export default function BoardView() {
             </header>
 
             {/* Main Board View */}
-            <main className="flex-1 overflow-x-auto p-8 flex gap-6 items-start custom-scrollbar">
+            <main className=" p-8 flex flex-col md:flex-row md:gap-3 overflow-x-auto  gap-6 items-start custom-scrollbar">
                 <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                     {lists.map((list) => (
                         <ListColumn

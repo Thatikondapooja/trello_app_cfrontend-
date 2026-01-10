@@ -1,29 +1,59 @@
-import { Interface } from "node:readline";
-
-export  interface Label{
-name:string;
-color:string;
+export interface Label {
+  name: string;
+  color: string;
 }
 
+/* ---------- Checklist ---------- */
+export interface ChecklistItem {
+  id: number;
+  text: string;
+  isCompleted: boolean;
+}
 
-export interface Card {
+export interface Checklist {
+  id: number;
+  title: string;
+  items: ChecklistItem[];
+}
+
+/* ---------- Card shown on board ---------- */
+export interface BoardCard {
+  id: number;
+  title: string;
+  description: string | null;
+  dueDate: string | null;
+  reminderMinutes: number | null;
+  isCompleted: boolean;
+  labels: Label[];
+  listId: number;
+  position:number;
+  reminderSent:boolean;
+  selectedCard:null,
+}
+
+/* ---------- Full card (modal) ---------- */
+export interface FullCard extends BoardCard {
+  list?: {
     id: number;
     title: string;
-    description: string | null;
-    dueDate: string | null;
-    labels: Label[];
-    listId: number;
-    position: number;
-    reminderMinutes: number | null;
-    isCompleted:boolean;
+    board?: {
+      id: number;
+    };
+  };
+  checklists: Checklist[];
+  members?: {
+    id: number;
+    FullName: string;
+    email: string;
+  }[];
 }
 
-
+/* ---------- Redux ---------- */
 export interface CardState {
-    cards: Card[]
-     
-        loading: boolean;
-        error: string | null;
+  cards: BoardCard[];
+  selectedCard: FullCard | null;
+  loading: boolean;
+  error: string | null;
 }
 export interface SaveCardOrderPayload {
     listId: number;          // Which list was reordered

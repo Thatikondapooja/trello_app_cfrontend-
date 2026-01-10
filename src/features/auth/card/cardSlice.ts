@@ -1,25 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { completeCard, createCard, fetchCardById, fetchCardsByList, moveCardThunk, updateCard } from "./cardThunks";
 import { arrayMove } from "@dnd-kit/sortable";
+import { BoardCard, FullCard } from "./types";
+import { addChecklistItem, createChecklist, deleteChecklist, toggleChecklistItem } from "../../checklists/checklistThunk";
+import Checklist from "../../checklists/checklist";
 
-interface Card {
-    id: number;
-    title: string;
-    description: string | null;
-    dueDate: string | null;
-    labels: { name: string; color: string }[]; // ✅ FIX
-    reminderMinutes:number|null;
-    listId: number;
-    position: number;
-    isCompleted:boolean;
-    reminderSent:boolean;
-    
-}
+// interface Card {
+//     id: number;
+//     title: string;
+//     description: string | null;
+//     dueDate: string | null;
+//     labels: { name: string; color: string }[]; // ✅ FIX
+//     reminderMinutes:number|null;
+//     listId: number;
+//     position: number;
+//     isCompleted:boolean;
+//     reminderSent:boolean;
+//     selectedCard: FullCard | null;
+
+// }
 
 
 interface CardState {
-    cards: Card[];
-    selectedCard: Card | null;
+    cards: BoardCard[];
+    selectedCard: FullCard | null;
     loading: boolean;
     error: string | null;
 }
@@ -68,7 +72,7 @@ const cardSlice = createSlice({
         },
 
         // 🧾 CARD DETAILS MODAL
-        setSelectedCard(state, action: PayloadAction<Card>) {
+        setSelectedCard(state, action: PayloadAction<FullCard>) {
             state.selectedCard = action.payload;
             console.log("setSelectedCard", setSelectedCard)
         },
@@ -94,45 +98,100 @@ const cardSlice = createSlice({
                 const { listId, cards } = action.payload;
 
                 cards.forEach((card: any) => {
-                    const exists = state.cards.find(c => c.id === card.id);
-                    if (!exists) {
+                    if (!state.cards.find(c => c.id === card.id)) {
                         state.cards.push({
                             id: card.id,
                             title: card.title,
                             description: card.description,
                             dueDate: card.dueDate,
-                            labels: card.labels,
-                            listId,
-                            position: card.position,
                             reminderMinutes: card.reminderMinutes,
                             isCompleted: card.isCompleted,
-                            reminderSent: card.reminderSent
+                            labels: card.labels,
+                            listId,
+                            position:card.position,
+                            reminderSent: card.reminderSent,
+                            selectedCard: card.selectedCard,
                         });
                     }
-                });
+                })
             })
 
+             
             /* CREATE */
-            .addCase(createCard.fulfilled, (state, action) => {
-                const card = action.payload;
+            .addCase(createChecklist.fulfilled, (state, action) => {
+                const checklist = action.payload;
+                console.log("checklist", checklist);
 
-                state.cards.push({
-                    id: card.id,
-                    title: card.title,
-                    description: card.description,
-                    dueDate: card.dueDate,
-                    labels: card.labels,
-                    listId: card.list.id,
-                    position: card.position,
-                    reminderMinutes: card.reminderMinutes,
-                    isCompleted: card.isCompleted,
-                    reminderSent: card.reminderSent
+                if (!state.selectedCard) return;
 
-                });
+                if (state.selectedCard.id === checklist.cardId) {
+                    state.selectedCard.checklists = [
+                        ...(state.selectedCard.checklists ?? []),
+                        checklist,
+                    ];
+                }
+                console.log("checklist.cardId:", checklist.cardId);
+                console.log("state.selectedCard.id:", state.selectedCard.id);
+                console.log("UPDATED CHECKLISTS:", state.selectedCard.checklists);
             })
+
+
+            /* ADD CHECKLIST ITEM → UPDATE selectedCard */
+            .addCase(addChecklistItem.fulfilled, (state, action) => {
+                if (!state.selectedCard) return;
+
+                const item = action.payload;
+                const checklistId = item.checklist.id;
+
+                const checklist = state.selectedCard.checklists?.find(
+                    (c) => c.id === checklistId
+                );
+
+                if (checklist) {
+                    checklist.items.push(item);
+                }
+            })
+
+            /* TOGGLE CHECKLIST ITEM → UPDATE selectedCard */
+            .addCase(toggleChecklistItem.fulfilled, (state, action) => {
+                if (!state.selectedCard) return;
+
+                const updatedItem = action.payload;
+
+                for (const checklist of state.selectedCard.checklists ?? []) {
+                    const item = checklist.items.find(
+                        (i) => i.id === updatedItem.id
+                    );
+
+                    if (item) {
+                        item.isCompleted = updatedItem.isCompleted;
+                        break;
+                    }
+                }
+            })
+
+            //     state.cards.push({
+            //         id: card.id,
+            //         title: card.title,
+            //         description: card.description,
+            //         dueDate: card.dueDate,
+            //         labels: card.labels,
+            //         listId: card.list.id,
+            //         position: card.position,
+            //         reminderMinutes: card.reminderMinutes,
+            //         isCompleted: card.isCompleted,
+            //         reminderSent: card.reminderSent,
+            //         selectedCard: card.selectedCard
+            //     });
+            // })
 
             .addCase(fetchCardById.fulfilled, (state, action) => {
-                state.selectedCard = action.payload;
+                // state.selectedCard = action.payload; // FullCard
+                state.selectedCard = {
+                    ...action.payload,
+                    checklists: action.payload.checklists ?? [],
+                };
+
             })
 
 
@@ -179,7 +238,20 @@ const cardSlice = createSlice({
 
 
                 
+            })
+
+            .addCase(deleteChecklist.fulfilled, (state, action) => {
+                if (!state.selectedCard?.checklists) return;
+
+                const checklistId = action.payload;
+
+                state.selectedCard.checklists =
+                    state.selectedCard.checklists.filter(
+                        (c) => c.id !== checklistId
+                    );
             });
+
+
             
     },
     

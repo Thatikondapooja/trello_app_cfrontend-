@@ -4,12 +4,12 @@ import { useDroppable } from "@dnd-kit/core";
 import Button from "../../components/comman/Button";
 import InputComponent from "../../components/comman/inputComponent";
 import TaskCard from "../TaskCard";
-import { Card } from "../../features/auth/card/types";
+import { BoardCard } from "../../features/auth/card/types";
 
 interface ListColumnProps {
     listId: number;
     title: string;
-    cards: Card[];
+    cards: BoardCard[];
     cardTitles: Record<string, string>;
     setCardTitles: Dispatch<SetStateAction<Record<string, string>>>;
     onAddCard: (listId: number) => void;
