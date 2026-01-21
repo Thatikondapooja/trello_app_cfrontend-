@@ -95,12 +95,19 @@ export const updateCard = createAsyncThunk(
     }
 );
 
-export const completeCard = createAsyncThunk(
-    "card/complete",
+// export const completeCard = createAsyncThunk(
+//     "card/complete",
+//     async (cardId: number) => {
+//         const res = await api.patch(`/cards/${cardId}/complete`);
+//         console.log("res", res)
+//         return res.data;
+//     }
+// );
+
+export const toggleCardComplete = createAsyncThunk(
+    "card/toggleComplete",
     async (cardId: number) => {
-        const res = await api.patch(`/cards/${cardId}/complete`);
-        console.log("res", res)
+        const res = await api.patch(`/cards/${cardId}/toggle-complete`);
         return res.data;
     }
 );
-

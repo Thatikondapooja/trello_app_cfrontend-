@@ -76,14 +76,14 @@ function emailValidate(){
 function passwordValidate(){
 
     // Password
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{4,}$/;
     if (!password) {
         setpasswordErrors("Password is required");
         return false;
     } 
      if (!passwordRegex.test(password)) {
         setpasswordErrors
-            ("Password must be at least 8 characters and include letters & numbers");
+            ("Password must be at least 4 characters and include letters & numbers");
         return false;
     }
 

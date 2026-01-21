@@ -1,82 +1,79 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { addMemberToCard, fetchBoardMembers } from "../../member/memberThunk";
-import { useDebounce } from "../../../hooks/useDebounce";
+import {
+    fetchBoardMembers,
+    addMemberToCard,
+} from "../../member/memberThunk";
 
+interface Props {
+    cardId: number;
+    boardId: number;
+    cardMembers: any[];
+    onClose: () => void;
+}
 
-export default function CardMembers({ cardId, boardId, cardMembers }: any) {
+export default function CardMembers({
+    cardId,
+    boardId,
+    cardMembers,
+    onClose,
+}: Props) {
     const dispatch = useAppDispatch();
     const boardMembers = useAppSelector(
         (state) => state.members.boardMembers
     );
+    console.log("boardMembers", boardMembers)
 
     const [search, setSearch] = useState("");
-    const [showDropdown, setShowDropdown] = useState(false);
-
-    const debouncedSearch = useDebounce(search, 300);
 
     useEffect(() => {
         dispatch(fetchBoardMembers(boardId));
     }, [boardId, dispatch]);
 
     const filteredMembers = boardMembers
-        .filter((user: any) =>
-            user.FullName
-                .toLowerCase()
-                .includes(debouncedSearch.toLowerCase())
+        .filter((u: any) =>
+            u.FullName.toLowerCase().includes(search.toLowerCase())
         )
-        .filter(
-            (user: any) =>
-                !cardMembers.some((m: any) => m.id === user.id)
-        );
-
-    
-
+        .filter((u: any) => !cardMembers.some((m) => m.id === u.id));
+    console.log("filteredMembers", filteredMembers)
     return (
-        <div className="relative">
-            {/* <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search members"
-                className="w-full border px-3 py-2 rounded"
-            /> */}
+        <div className="bg-white border rounded shadow w-64 p-2">
+            <div className="flex justify-between mb-2">
+                <span className="text-sm font-semibold">Add members</span>
+                <button onClick={onClose}>✕</button>
+            </div>
 
             <input
                 value={search}
-                onChange={(e) => {
-                    setSearch(e.target.value);
-                    setShowDropdown(true);
-                }}
-                onFocus={() => setShowDropdown(true)}
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search members"
-                className="w-full border px-3 py-2 rounded"
+                className="w-full border px-2 py-1 text-sm rounded"
             />
 
-            {/* 🔥 SEARCH RESULT DROPDOWN */}
-            {showDropdown && filteredMembers.length > 0 && (
-                <div className="absolute w-full bg-white border rounded shadow mt-1 z-10">
+            {search && filteredMembers.length > 0 && (
+                <div className="mt-2 max-h-40 overflow-y-auto">
                     {filteredMembers.map((user: any) => (
                         <div
                             key={user.id}
                             onClick={() => {
-                                dispatch(
-                                    addMemberToCard({
-                                        cardId,
-                                        userId: user.id,
-                                    })
-                                );
+                                dispatch(addMemberToCard({ cardId, userId: user.id }));
                                 setSearch("");
-                                setShowDropdown(false);
+                                onClose();
                             }}
-                            className="px-3 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-2"
+                            className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer"
                         >
                             <div className="w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs">
                                 {user.FullName[0]}
                             </div>
-                            <span>{user.FullName}</span>
+                            <span className="text-sm">{user.FullName}</span>
                         </div>
                     ))}
-                </div>)}
                 </div>
-            )
-            }
+            )}
+
+            {search && filteredMembers.length === 0 && (
+                <p className="text-xs text-gray-400 mt-2">No results</p>
+            )}
+        </div>
+    );
+}

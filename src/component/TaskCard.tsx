@@ -3,7 +3,17 @@ import { BoardCard } from "../features/auth/card/types";
 import { Clock } from "lucide-react";
 import { formatDueDate } from "../utils/FormateDate";
 import Checklist from "../features/checklists/checklist";
-import { completeCard } from "../features/auth/card/cardThunks";
+import CardMemberAvatars from "../features/auth/card/CardMemberAvatars";
+import { LabelColor } from "../features/auth/card/label.types";
+import { Label } from "../features/auth/card/types";
+const LABEL_COLORS: Record<LabelColor, string> = {
+    red: "bg-red-500",
+    orange: "bg-orange-500",
+    blue: "bg-blue-500",
+    green: "bg-green-500",
+    gray: "bg-gray-500",
+};
+
 
 interface Props{
     card: BoardCard;
@@ -25,6 +35,8 @@ export default function TaskCard({ card, onClick }: Props) {
             listId: card.listId,
         },
     });
+    const checklistStats = card.checklistSummary ?? null;
+
 
     return (
         <div
@@ -47,7 +59,16 @@ export default function TaskCard({ card, onClick }: Props) {
                 ⠿ Drag
             </div>
 
-                <div className="font-medium">{card.title}</div> 
+                <div className="font-medium">{card.title}</div>
+
+
+            {card.checklistSummary && (
+                <div className="flex items-center gap-1 mt-2 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded w-fit">
+                     {card.checklistSummary.completed}/{card.checklistSummary.total}
+                </div>
+            )}
+
+ 
            {card.dueDate && (
                 <div className="flex items-center gap-1 mt-2 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded w-fit">
                     <Clock size={12} />
@@ -61,24 +82,26 @@ export default function TaskCard({ card, onClick }: Props) {
             )}
 
             <div className="flex gap-1 flex-wrap mt-1">
-                {card.isCompleted&&
-                    <span
-                        
-                        className={`px-2 py-0.5 text-xs rounded text-white bg-green-500`}
-                    >
-                      completed
+                {card.isCompleted && (
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                        Completed
                     </span>
-                }
+                )}
+
             </div>
+
 
             <div className="flex gap-1 flex-wrap mt-1">
                 {card.labels.map(label => (
                     <span
                         key={label.name}
-                        className={`px-2 py-0.5 text-xs rounded text-white bg-${label.color}-500`}
+                        className={`px-2 py-0.5 text-xs rounded text-white ${LABEL_COLORS[label.color]
+                            }`}
                     >
                         {label.name}
                     </span>
+
+
                 ))}
             </div>
             {card.dueDate && (
@@ -90,11 +113,16 @@ export default function TaskCard({ card, onClick }: Props) {
                                 : "bg-slate-400"
                         }`}
                 >
-                    {card.isCompleted ? "Completed" : "Due"}
+                    {card.isCompleted ? "Completed" : formatDueDate(card.dueDate)}
                 </span>
             )}
 
-         
+            {card.members && card.members.length > 0 && (
+               <div className="ml-52 mt-0"> 
+
+                <CardMemberAvatars members={card.members}  />
+             </div>
+            )}
 
 
             </div>

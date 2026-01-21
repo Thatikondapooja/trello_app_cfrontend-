@@ -276,10 +276,16 @@ export default function BoardView() {
     const [activeCard, setActiveCard] = useState<{ id: number; title: string } | null>(null);
     const boards = useAppSelector(state => state.board.boards);
     console.log("boars in dashboard", boards)
+
     const selectedBoardId = useAppSelector(
         (state) => state.board.selectedBoardId
     );
     console.log("selectedBoardId", selectedBoardId)
+
+
+    const selectedCard = useAppSelector(state => state.card.selectedCard);
+    console.log("selectedCard", selectedCard)
+
     const lists = useAppSelector((state) =>
         state.list.lists.filter(
             (list) => list.boardId === Number(selectedBoardId)
@@ -412,9 +418,7 @@ export default function BoardView() {
         );
     };
 
-    const selectedCard = useAppSelector(state => state.card.selectedCard);
-    console.log("selectedCard", selectedCard)
-
+   
     const handleCardClick = (cardId: number) => {
     
         dispatch(fetchCardById(cardId));

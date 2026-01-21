@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { completeCard, createCard, fetchCardById, fetchCardsByList, moveCardThunk, updateCard } from "./cardThunks";
+import { createCard, fetchCardById, fetchCardsByList, moveCardThunk, toggleCardComplete, updateCard } from "./cardThunks";
 import { arrayMove } from "@dnd-kit/sortable";
 import { BoardCard, FullCard } from "./types";
 import { addChecklistItem, createChecklist, deleteChecklist, toggleChecklistItem } from "../../checklists/checklistThunk";
 import Checklist from "../../checklists/checklist";
+import { addMemberToCard } from "../../member/memberThunk";
 
 // interface Card {
 //     id: number;
@@ -111,6 +112,10 @@ const cardSlice = createSlice({
                             position:card.position,
                             reminderSent: card.reminderSent,
                             selectedCard: card.selectedCard,
+                            members: card.members ?? [],
+                            checklistSummary: card.checklists ?? [],
+
+
                         });
                     }
                 })
@@ -152,6 +157,7 @@ const cardSlice = createSlice({
                 }
             })
 
+            
             /* TOGGLE CHECKLIST ITEM → UPDATE selectedCard */
             .addCase(toggleChecklistItem.fulfilled, (state, action) => {
                 if (!state.selectedCard) return;
@@ -194,17 +200,16 @@ const cardSlice = createSlice({
 
             })
 
-
-
             .addCase(updateCard.fulfilled, (state, action) => {
                 const updated = action.payload;
 
-                // Update selectedCard (modal)
                 if (state.selectedCard?.id === updated.id) {
-                    state.selectedCard = updated;
+                    state.selectedCard = {
+                        ...state.selectedCard, // ✅ keep checklists
+                        ...updated,            // ✅ update only changed fields
+                    };
                 }
 
-                // Update card inside board list
                 const index = state.cards.findIndex(c => c.id === updated.id);
                 if (index !== -1) {
                     state.cards[index] = {
@@ -214,18 +219,47 @@ const cardSlice = createSlice({
                 }
             })
 
-            .addCase(completeCard.fulfilled, (state, action) => {
-                const card = state.cards.find(c => c.id === action.payload.id);
+            
+            // .addCase(completeCard.fulfilled, (state, action) => {
+            //     const card = state.cards.find(c => c.id === action.payload.id);
+            //     if (card) {
+            //         card.isCompleted = true;
+            //         card.reminderSent = true;
+            //     }
+
+            //     if (state.selectedCard && state.selectedCard.id === action.payload.id) {
+            //         state.selectedCard.isCompleted = true;
+            //     }
+            // })
+            .addCase(toggleCardComplete.fulfilled, (state, action) => {
+                const updated = action.payload;
+
+                // Update board cards
+                const card = state.cards.find(c => c.id === updated.id);
                 if (card) {
-                    card.isCompleted = true;
-                    card.reminderSent = true;
+                    card.isCompleted = updated.isCompleted;
                 }
 
-                if (state.selectedCard && state.selectedCard.id === action.payload.id) {
-                    state.selectedCard.isCompleted = true;
+                // ✅ SAFE selectedCard update
+                if (state.selectedCard && state.selectedCard.id === updated.id) {
+                    state.selectedCard.isCompleted = updated.isCompleted;
                 }
             })
 
+            .addCase(addMemberToCard.fulfilled, (state, action) => {
+                const updatedCard = action.payload;
+
+                // Update board card
+                const card = state.cards.find(c => c.id === updatedCard.id);
+                if (card) {
+                    card.members = updatedCard.members;
+                }
+
+                // Update modal card
+                if (state.selectedCard && state.selectedCard.id === updatedCard.id) {
+                    state.selectedCard.members = updatedCard.members;
+                }
+            })
 
 
             /* MOVE BETWEEN LISTS */
@@ -234,10 +268,7 @@ const cardSlice = createSlice({
                 const card = state.cards.find(c => c.id === moved.id);
                 if (card) {
                     card.listId = moved.list.id;
-                }
-
-
-                
+                } 
             })
 
             .addCase(deleteChecklist.fulfilled, (state, action) => {
@@ -257,8 +288,6 @@ const cardSlice = createSlice({
     
     
 });
-
-
 
 export const {
     reorderCards,

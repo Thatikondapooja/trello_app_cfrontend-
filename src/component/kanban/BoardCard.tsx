@@ -1,5 +1,7 @@
 interface BoardCardProps {
     title: string;
+   
+
 }
 
 export default function BoardCard({ title }: BoardCardProps) {

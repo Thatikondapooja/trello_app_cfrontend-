@@ -1,7 +1,10 @@
+import { LabelColor } from "./label.types";
+
 export interface Label {
   name: string;
-  color: string;
+  color: LabelColor;
 }
+
 
 /* ---------- Checklist ---------- */
 export interface ChecklistItem {
@@ -18,6 +21,7 @@ export interface Checklist {
 
 /* ---------- Card shown on board ---------- */
 export interface BoardCard {
+  
   id: number;
   title: string;
   description: string | null;
@@ -29,6 +33,17 @@ export interface BoardCard {
   position:number;
   reminderSent:boolean;
   selectedCard:null,
+  members?: {
+    id: number;
+    FullName: string;
+  }[];
+
+
+  checklistSummary?: {
+    completed: number;
+    total: number;
+  };
+
 }
 
 /* ---------- Full card (modal) ---------- */

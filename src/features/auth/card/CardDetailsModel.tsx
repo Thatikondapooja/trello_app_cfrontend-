@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { BoardCard } from "./types";
-import { completeCard, updateCard } from "./cardThunks";
+import { useState } from "react";
 import { useAppDispatch } from "../../../app/hooks";
+import {  toggleCardComplete, updateCard } from "./cardThunks";
 import { addActivity } from "../../activity/activitySlice";
 import Checklist from "../../checklists/checklist";
 import { createChecklist } from "../../checklists/checklistThunk";
-import { FullCard } from "./types";
-import checklist from "../../checklists/checklist";
 import CardMembers from "./CardMembers";
+import { FullCard, Label } from "./types";
+import { LabelColor } from "./label.types";
+
 
 /* Label colors */
-const LABEL_COLORS: Record<string, string> = {
+const LABEL_COLORS: Record<LabelColor, string> = {
     red: "bg-red-500",
     orange: "bg-orange-500",
     blue: "bg-blue-500",
@@ -18,7 +18,8 @@ const LABEL_COLORS: Record<string, string> = {
     gray: "bg-gray-500",
 };
 
-const LABEL_PRESETS = [
+
+const LABEL_PRESETS: { name: string; color: LabelColor } [] = [
     { name: "Bug", color: "red" },
     { name: "Urgent", color: "orange" },
     { name: "Frontend", color: "blue" },
@@ -43,76 +44,84 @@ export default function CardDetailsModal({ card, onClose }: Props) {
     );
     const [labels, setLabels] = useState(card.labels ?? []);
 
-
-    const [showChecklistInput, setShowChecklistInput] = useState(false);
+    // const [showChecklistInput, setShowChecklistInput] = useState(false);
     const [checklistTitle, setChecklistTitle] = useState("");
+    // const [showMemberSearch, setShowMemberSearch] = useState(false);
+
+    type ActivePopover = "checklist" | "member" | null;
+
+    const [activePopover, setActivePopover] = useState<ActivePopover>(null);
 
     /* Save description */
     const saveDescription = () => {
         dispatch(updateCard({ id: card.id, data: { description } }));
-        dispatch(addActivity({
-            id: Date.now().toString(),
-            message: "Description updated",
-            timestamp: Date.now(),
-        }));
+        dispatch(
+            addActivity({
+                id: Date.now().toString(),
+                message: "Description updated",
+                timestamp: Date.now(),
+            })
+        );
     };
 
-    
-    /* Save due date + time */
+    /* Save due date */
     const saveDueDate = () => {
         if (!dueDate) return;
 
-        dispatch(updateCard({
-            id: card.id,
-            data: {
-                dueDate: `${dueDate}T${dueTime}`,
-                reminderMinutes: reminderMinutes === 0 ? null : reminderMinutes,
-            },
-        }));
+        dispatch(
+            updateCard({
+                id: card.id,
+                data: {
+                    dueDate: `${dueDate}T${dueTime}`,
+                    reminderMinutes: reminderMinutes === 0 ? null : reminderMinutes,
+                },
+            })
+        );
     };
 
     /* Toggle labels */
-    const toggleLabel = (label: { name: string; color: string }) => {
-        const exists = labels.some(l => l.name === label.name);
-        const updated = exists
-            ? labels.filter(l => l.name !== label.name)
+    const toggleLabel = (label: Label) => {
+        const exists = labels.some((l) => l.name === label.name);
+
+        const updated: Label[] = exists
+            ? labels.filter((l) => l.name !== label.name)
             : [...labels, label];
 
         setLabels(updated);
         dispatch(updateCard({ id: card.id, data: { labels: updated } }));
-
-
-       
     };
 
-    function addCheckList() {
 
-        if (!checklistTitle){
-            return false;
-        }
-        dispatch(createChecklist({
-            cardId: card.id,
-            title: checklistTitle,
-        }));
+    const addChecklist = () => {
+        if (!checklistTitle.trim()) return;
+
+        dispatch(
+            createChecklist({
+                cardId: card.id,
+                title: checklistTitle,
+            })
+        );
+        setActivePopover("checklist")
         setChecklistTitle("");
-        setShowChecklistInput(false);
-    }
+ 
+    };
+
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl w-[500px] p-6 shadow-xl  gap-5">
+            <div className="bg-white rounded-xl w-[900px] p-6 shadow-xl">
 
                 {/* Header */}
-                <div className="flex justify-between mb-4">
-                    <label className="flex gap-2 mt-4">
+                <div className="flex justify-between items-center mb-4">
+                    <label className="flex gap-2 items-center">
                         <input
                             type="checkbox"
                             checked={card.isCompleted}
-                            onChange={() => dispatch(completeCard(card.id))}
+                            onChange={() => dispatch(toggleCardComplete(card.id))}
+
                         />
-                    
-                 
-                        <h2 className="font-bold">{card.title}</h2> </label>
-                        <button className="ml-44" onClick={onClose}>✕</button>  
+                        <h2 className="font-bold text-lg">{card.title}</h2>
+                    </label>
+                    <button onClick={onClose} className="text-xl">✕</button>
                 </div>
 
                 {/* Description */}
@@ -124,102 +133,105 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                     placeholder="Add description..."
                 />
 
-                {/* Due Date */}
-                <div className="flex gap-2 mt-3">
+                {/* Toolbar */}
+                <div className="flex flex-wrap gap-2 mt-3 items-center">
                     <input
                         type="date"
                         value={dueDate}
                         onChange={(e) => setDueDate(e.target.value)}
-                        className="border px-2 py-1 rounded"
+                        className="border h-9 px-2 rounded text-sm"
                     />
+
                     <input
                         type="time"
                         value={dueTime}
                         onChange={(e) => setDueTime(e.target.value)}
-                        className="border px-2 py-1 rounded"
+                        className="border h-9 px-2 rounded text-sm"
                     />
+
+                    <select
+                        value={reminderMinutes}
+                        onChange={(e) => setReminderMinutes(Number(e.target.value))}
+                        className="border h-9 px-2 rounded text-sm"
+                    >
+                        <option value={0}>No reminder</option>
+                        <option value={1440}>1 day before</option>
+                        <option value={60}>1 hour before</option>
+                        <option value={1}>1 minute before</option>
+                    </select>
+
+                    <button
+                        onClick={saveDueDate}
+                        className="h-9 text-sm bg-indigo-50 text-gray-600 px-3 rounded"
+                    >
+                        Save Due Date
+                    </button>
+
+                    {/* Add checklist */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setActivePopover("checklist")}
+                            className="h-9 text-sm bg-indigo-50 text-gray-600 px-3 rounded"
+                        >
+                            + Add checklist
+                        </button>
+
+                        {activePopover === "checklist" && (
+                            <div className="absolute top-full left-0 mt-2 bg-white border rounded shadow p-3 w-56 z-50">
+                                <input
+                                    className="border text-sm px-2 py-1 rounded w-full"
+                                    placeholder="Checklist title"
+                                    value={checklistTitle}
+                                    onChange={(e) => setChecklistTitle(e.target.value)}
+                                />
+                                <div className="flex justify-between mt-3">
+                                    <button
+                                        onClick={addChecklist}
+                                        className="bg-blue-500 text-sm text-white px-3 py-1 rounded"
+                                    >
+                                        Add
+                                    </button>
+                                    <button
+                                        onClick={() => setActivePopover(null)}
+                                        className="text-sm text-gray-500"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Add member */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setActivePopover("member")}
+                            className="h-9 text-sm bg-indigo-50 text-gray-600 px-3 rounded"
+                        >
+                            + Add member
+                        </button>
+
+                        {activePopover === "member" && card.list?.board?.id && (
+                            <div className="absolute top-full left-0 mt-2 z-50">
+                                <CardMembers
+                                    cardId={card.id}
+                                    boardId={card.list.board.id}
+                                    cardMembers={card.members ?? []}
+                                    onClose={() => setActivePopover(null)}
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div>
 
-                {/* Reminder */}
-                <select
-                    className="border px-2 py-1 mt-2 rounded"
-                    value={reminderMinutes}
-                    onChange={(e) => setReminderMinutes(Number(e.target.value))}
-                >
-                    <option value={0}>No reminder</option>
-                    <option value={1440}>1 day before</option>
-                    <option value={60}>1 hour before</option>
-                    <option value={1}>1 minute before</option>
-                </select>
-
-                <button
-                    className="mt-2 text-sm bg-indigo-50 text-gray-600 ml-3 px-3 py-1 rounded"
-                    onClick={saveDueDate}
-                >
-                    Save Due Date
-                </button>
-
-                {/* <button
-                    className="mt-4 text-sm text-red-600"
-                    onClick={() =>
-                        dispatch(createChecklist({
-                            cardId: card.id,
-                            title: "Checklist",
-                          
-                        }))
-                    }
-                >
-                    + Add checklist
-                </button> */}
-                <button
-                    className="mt-2 relative text-sm  bg-indigo-50 text-gray-600 ml-4 px-3 py-1  rounded-md  "
-                    onClick={() => setShowChecklistInput(true)}
-                >
-                    + Add checklist
-                </button>
-
-                {showChecklistInput && (
-                    <div className="md:mt-4 fixed left-40 mt-52 bg-blue-200 md:bg-indigo-50 top-72 md:left-[55%]   inset-0 gap-2 w-44 px-2 md:h-[15%]  h-[9%] border rounded-md ">
-                        <div className="mt-3  gap-2 ">
-                            <input
-                                className="border text-xs px-2 py-1 rounded w-full"
-                                placeholder="Checklist title"
-                                value={checklistTitle}
-                                onChange={(e) => setChecklistTitle(e.target.value)}
-                            />
-                            <div className="flex gap-9">
-                                <div>
-                                    <button
-                                        className="bg-blue-500 text-xs text-white px-3 py-1 ml-2 mt-2 rounded"
-                                        onClick={addCheckList}>Add </button>
-
-                                </div>
-                                <div><button className="text-xl ml-9" onClick={() => setShowChecklistInput(false)}>×</button></div>
-
-                            </div>
-                        </div>
-                    </div>
-                )}
-                {/* Complete */}
-                {/* <label className="flex gap-2 mt-4">
-                    <input
-                        type="checkbox"
-                        checked={card.isCompleted}
-                        onChange={() => dispatch(completeCard(card.id))}
-                    />
-                    Mark as complete
-                </label> */}
-
-              
-
                 {/* Labels */}
-                <h4 className="mt-4 font-semibold">Labels</h4>
+                <h4 className="mt-5 font-semibold">Labels</h4>
                 <div className="flex gap-2 flex-wrap mt-2">
-                    {LABEL_PRESETS.map(label => (
+                    {LABEL_PRESETS.map((label) => (
                         <button
                             key={label.name}
                             onClick={() => toggleLabel(label)}
-                            className={`${LABEL_COLORS[label.color]} mt-2 px-3 py-1 text-xs rounded text-white ${labels.some(l => l.name === label.name)
+                            className={`${LABEL_COLORS[label.color]} px-3 py-1 text-xs rounded text-white ${labels.some((l) => l.name === label.name)
                                     ? "opacity-100"
                                     : "opacity-40"
                                 }`}
@@ -228,34 +240,18 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                         </button>
                     ))}
                 </div>
-                
-                {/* CHECKLISTS SECTION */}
-                {(card.checklists ?? []).length === 0 && (
-                    <p className="text-sm text-gray-400 mt-3">
-                        No checklists yet
-                    </p>
-                )}
-                <div className="p-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+
+                {/* Checklists */}
+                <div className="mt-4 max-h-[60vh] overflow-y-auto">
+                    {card.checklists?.length === 0 && (
+                        <p className="text-sm text-gray-400">No checklists yet</p>
+                    )}
+
                     {card.checklists?.map((checklist) => (
                         <Checklist key={checklist.id} checklist={checklist} />
                     ))}
                 </div>
-
-                {card.list?.board?.id && (
-                    <CardMembers
-                        cardId={card.id}
-                        boardId={card.list.board.id}
-                        cardMembers={card.members ?? []}
-                    />
-                )}
-
-
             </div>
-
-           
-
-
-          
         </div>
     );
 }
