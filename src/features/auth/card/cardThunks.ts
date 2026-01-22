@@ -18,7 +18,8 @@ export const createCard = createAsyncThunk(
     ) => {
         try {
             const res = await createCardApi(payload);
-            return res.data;
+            // Ensure listId is passed to reducer even if backend omits it
+            return { ...res.data, listId: payload.listId };
         } catch {
             return rejectWithValue("Failed to create card");
         }

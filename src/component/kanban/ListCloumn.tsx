@@ -41,8 +41,7 @@ export default function ListColumn({
             >
                 <div className="flex flex-col gap-2">
                     {cards.map((card) => (
-                        <TaskCard key={card.id} card={card} onClick={onCardClick
-                        } />
+                        <TaskCard key={card.id} card={card} onClick={onCardClick} />
                     ))}
                 </div>
             </SortableContext>

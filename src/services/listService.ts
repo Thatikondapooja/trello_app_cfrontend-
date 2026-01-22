@@ -10,6 +10,6 @@ export const createListApi = (data: CreateListPayload) => {
     return api.post("/lists", data);
 };
 
-export const fetchListsApi = (boardId:number) => {
-    return api.get(`/boards/${boardId}/lists`);
+export const fetchListsApi = (boardId: number) => {
+    return api.get(`/lists/boards/${boardId}`);
 };

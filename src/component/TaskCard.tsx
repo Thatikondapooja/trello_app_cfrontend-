@@ -36,7 +36,7 @@ export default function TaskCard({ card, onClick }: Props) {
         },
     });
     const checklistStats = card.checklistSummary ?? null;
-
+    console.log("checklistStats", checklistStats)
 
     return (
         <div
@@ -60,13 +60,12 @@ export default function TaskCard({ card, onClick }: Props) {
             </div>
 
                 <div className="font-medium">{card.title}</div>
-
-
+{/* 
             {card.checklistSummary && (
                 <div className="flex items-center gap-1 mt-2 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded w-fit">
-                     {card.checklistSummary.completed}/{card.checklistSummary.total}
+                    {card.checklistSummary.completed}/{card.checklistSummary.total}
                 </div>
-            )}
+            )} */}
 
  
            {card.dueDate && (
@@ -81,14 +80,14 @@ export default function TaskCard({ card, onClick }: Props) {
                 </p>
             )}
 
-            <div className="flex gap-1 flex-wrap mt-1">
+            {/* <div className="flex gap-1 flex-wrap mt-1">
                 {card.isCompleted && (
                     <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
                         Completed
                     </span>
                 )}
 
-            </div>
+            </div> */}
 
 
             <div className="flex gap-1 flex-wrap mt-1">
@@ -117,13 +116,39 @@ export default function TaskCard({ card, onClick }: Props) {
                 </span>
             )}
 
-            {card.members && card.members.length > 0 && (
+            {/* {card.members && card.members.length > 0 && (
                <div className="ml-52 mt-0"> 
 
                 <CardMemberAvatars members={card.members}  />
              </div>
-            )}
+            )} */}
 
+
+            {/* Status row (checklist + completed + members) */}
+            <div className="flex items-center justify-between mt-2">
+
+                {/* LEFT SIDE */}
+                <div className="flex items-center gap-2 text-xs">
+
+                    {card.checklistSummary && (
+                        <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                            {card.checklistSummary.completed}/{card.checklistSummary.total}
+                        </span>
+                    )}
+
+                    {card.isCompleted && (
+                        <span className="bg-green-100 text-green-700 px-2 py-1 rounded">
+                            Completed
+                        </span>
+                    )}
+
+                </div>
+
+                {/* RIGHT SIDE */}
+                {card.members && card.members.length > 0 && (
+                    <CardMemberAvatars members={card.members} />
+                )}
+            </div>
 
             </div>
 

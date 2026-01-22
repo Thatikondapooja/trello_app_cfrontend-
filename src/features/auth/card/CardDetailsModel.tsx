@@ -7,6 +7,7 @@ import { createChecklist } from "../../checklists/checklistThunk";
 import CardMembers from "./CardMembers";
 import { FullCard, Label } from "./types";
 import { LabelColor } from "./label.types";
+import CardMemberAvatars from "./CardMemberAvatars";
 
 
 /* Label colors */
@@ -121,9 +122,17 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                         />
                         <h2 className="font-bold text-lg">{card.title}</h2>
                     </label>
-                    <button onClick={onClose} className="text-xl">✕</button>
-                </div>
+                  
+                    
+                
+                <div className="flex gap-4 items-center">
+                    {card.members && card.members.length > 0 && (
+                        <CardMemberAvatars members={card.members} />
+                    )}
+                    <button onClick={onClose} className="text-xl mt-1">✕</button>
 
+                </div> 
+                </div>
                 {/* Description */}
                 <textarea
                     className="w-full border p-2 rounded"

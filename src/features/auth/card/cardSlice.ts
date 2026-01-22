@@ -35,6 +35,18 @@ const initialState: CardState = {
     loading: false,
     error: null,
 };
+function calculateChecklistSummary(checklists: any[]) {
+    const total = checklists.reduce(
+        (sum, c) => sum + c.items.length,
+        0
+    );
+    const completed = checklists.reduce(
+        (sum, c) => sum + c.items.filter(item => item.isCompleted).length,
+        0
+    );
+
+    return total > 0 ? { completed, total } : null;
+}
 
 const cardSlice = createSlice({
     name: "card",
@@ -109,19 +121,38 @@ const cardSlice = createSlice({
                             isCompleted: card.isCompleted,
                             labels: card.labels,
                             listId,
-                            position:card.position,
+                            position: card.position,
                             reminderSent: card.reminderSent,
                             selectedCard: card.selectedCard,
                             members: card.members ?? [],
-                            checklistSummary: card.checklists ?? [],
 
-
+                            // ✅ CORRECT
+                            checklistSummary: card.checklistSummary ?? null,
                         });
                     }
-                })
+                });
             })
 
-             
+            /* CREATE */
+            .addCase(createCard.fulfilled, (state, action) => {
+                const card = action.payload;
+                state.cards.push({
+                    id: card.id,
+                    title: card.title,
+                    description: card.description || null,
+                    dueDate: card.dueDate || null,
+                    reminderMinutes: card.reminderMinutes || null,
+                    isCompleted: card.isCompleted || false,
+                    labels: card.labels || [],
+                    listId: card.listId, // Ensure listId is present in payload or mapped correctly
+                    position: card.position || 0,
+                    reminderSent: card.reminderSent || false,
+                    selectedCard: null,
+                    checklistSummary: null,
+                    members: []
+                });
+            })
+
             /* CREATE */
             .addCase(createChecklist.fulfilled, (state, action) => {
                 const checklist = action.payload;
@@ -146,35 +177,52 @@ const cardSlice = createSlice({
                 if (!state.selectedCard) return;
 
                 const item = action.payload;
-                const checklistId = item.checklist.id;
-
-                const checklist = state.selectedCard.checklists?.find(
-                    (c) => c.id === checklistId
+                const checklist = state.selectedCard.checklists.find(
+                    c => c.id === item.checklist.id
                 );
 
                 if (checklist) {
                     checklist.items.push(item);
+
+                    // 🔥 UPDATE BOARD CARD SUMMARY
+                    const boardCard = state.cards.find(
+                        c => c.id === state.selectedCard!.id
+                    );
+
+                    if (boardCard) {
+                        boardCard.checklistSummary = calculateChecklistSummary(
+                            state.selectedCard.checklists
+                        );
+                    }
                 }
             })
 
-            
+
             /* TOGGLE CHECKLIST ITEM → UPDATE selectedCard */
             .addCase(toggleChecklistItem.fulfilled, (state, action) => {
                 if (!state.selectedCard) return;
 
                 const updatedItem = action.payload;
 
-                for (const checklist of state.selectedCard.checklists ?? []) {
-                    const item = checklist.items.find(
-                        (i) => i.id === updatedItem.id
-                    );
-
+                for (const checklist of state.selectedCard.checklists) {
+                    const item = checklist.items.find(i => i.id === updatedItem.id);
                     if (item) {
                         item.isCompleted = updatedItem.isCompleted;
                         break;
                     }
                 }
+
+                const boardCard = state.cards.find(
+                    c => c.id === state.selectedCard!.id
+                );
+
+                if (boardCard) {
+                    boardCard.checklistSummary = calculateChecklistSummary(
+                        state.selectedCard.checklists
+                    );
+                }
             })
+
 
             //     state.cards.push({
             //         id: card.id,
@@ -205,10 +253,12 @@ const cardSlice = createSlice({
 
                 if (state.selectedCard?.id === updated.id) {
                     state.selectedCard = {
-                        ...state.selectedCard, // ✅ keep checklists
-                        ...updated,            // ✅ update only changed fields
+                        ...state.selectedCard,
+                        ...updated,
+                        checklists: state.selectedCard?.checklists, // 🔥 KEEP
                     };
                 }
+
 
                 const index = state.cards.findIndex(c => c.id === updated.id);
                 if (index !== -1) {
@@ -219,7 +269,7 @@ const cardSlice = createSlice({
                 }
             })
 
-            
+
             // .addCase(completeCard.fulfilled, (state, action) => {
             //     const card = state.cards.find(c => c.id === action.payload.id);
             //     if (card) {
@@ -268,7 +318,7 @@ const cardSlice = createSlice({
                 const card = state.cards.find(c => c.id === moved.id);
                 if (card) {
                     card.listId = moved.list.id;
-                } 
+                }
             })
 
             .addCase(deleteChecklist.fulfilled, (state, action) => {
@@ -283,10 +333,10 @@ const cardSlice = createSlice({
             });
 
 
-            
+
     },
-    
-    
+
+
 });
 
 export const {

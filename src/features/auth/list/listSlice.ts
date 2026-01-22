@@ -28,7 +28,7 @@ const listSlice = createSlice({
                 state.lists = action.payload.map((list: any) => ({
                     id: list.id,
                     title: list.title,
-                    boardId: list.board.id,
+                    boardId: action.meta.arg, // ✅ Use the arg passed to thunk
                 }));
             })
             .addCase(fetchLists.rejected, (state, action) => {

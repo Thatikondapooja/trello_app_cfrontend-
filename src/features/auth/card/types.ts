@@ -42,9 +42,9 @@ export interface BoardCard {
   checklistSummary?: {
     completed: number;
     total: number;
-  };
-
+  } | null;
 }
+
 
 /* ---------- Full card (modal) ---------- */
 export interface FullCard extends BoardCard {
