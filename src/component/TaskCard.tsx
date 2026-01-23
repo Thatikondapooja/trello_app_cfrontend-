@@ -2,10 +2,8 @@ import { useSortable } from "@dnd-kit/sortable";
 import { BoardCard } from "../features/auth/card/types";
 import { Clock } from "lucide-react";
 import { formatDueDate } from "../utils/FormateDate";
-import Checklist from "../features/checklists/checklist";
 import CardMemberAvatars from "../features/auth/card/CardMemberAvatars";
 import { LabelColor } from "../features/auth/card/label.types";
-import { Label } from "../features/auth/card/types";
 const LABEL_COLORS: Record<LabelColor, string> = {
     red: "bg-red-500",
     orange: "bg-orange-500",
@@ -15,7 +13,7 @@ const LABEL_COLORS: Record<LabelColor, string> = {
 };
 
 
-interface Props{
+interface Props {
     card: BoardCard;
     onClick: (id: number) => void;
 }
@@ -59,16 +57,16 @@ export default function TaskCard({ card, onClick }: Props) {
                 ⠿ Drag
             </div>
 
-                <div className="font-medium">{card.title}</div>
-{/* 
+            <div className="font-medium">{card.title}</div>
+            {/* 
             {card.checklistSummary && (
                 <div className="flex items-center gap-1 mt-2 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded w-fit">
                     {card.checklistSummary.completed}/{card.checklistSummary.total}
                 </div>
             )} */}
 
- 
-           {card.dueDate && (
+
+            {card.dueDate && (
                 <div className="flex items-center gap-1 mt-2 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded w-fit">
                     <Clock size={12} />
                     {formatDueDate(card.dueDate)}
@@ -106,10 +104,10 @@ export default function TaskCard({ card, onClick }: Props) {
             {card.dueDate && (
                 <span
                     className={`text-xs px-2 py-1 rounded text-white ${card.isCompleted
-                            ? "bg-green-500"
-                            : new Date(card.dueDate) < new Date()
-                                ? "bg-red-500"
-                                : "bg-slate-400"
+                        ? "bg-green-500"
+                        : new Date(card.dueDate) < new Date()
+                            ? "bg-red-500"
+                            : "bg-slate-400"
                         }`}
                 >
                     {card.isCompleted ? "Completed" : formatDueDate(card.dueDate)}
@@ -150,8 +148,8 @@ export default function TaskCard({ card, onClick }: Props) {
                 )}
             </div>
 
-            </div>
+        </div>
 
-       
+
     );
 }
