@@ -19,12 +19,12 @@ const AppRoutes = () => {
                     element={
                         <ProtectedRoute>
                             <Dashboard />
-                        
+
                         </ProtectedRoute>
                     }
                 />
                 <Route
-                    path="/board"
+                    path="/board/:boardId"
                     element={
                         <ProtectedRoute>
                             <BoardView />
@@ -32,12 +32,12 @@ const AppRoutes = () => {
                     }
                 />
 
-                <Route path="/board/create" element={<CreateBoard/>}/>
-                
+                <Route path="/board/create" element={<CreateBoard />} />
+
 
             </Routes>
         </BrowserRouter>
-       
+
     );
 };
 

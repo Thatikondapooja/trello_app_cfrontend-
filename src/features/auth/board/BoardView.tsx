@@ -276,10 +276,9 @@ export default function BoardView() {
     const boards = useAppSelector(state => state.board.boards);
     console.log("boars in dashboard", boards)
 
-    const selectedBoardId = useAppSelector(
-        (state) => state.board.selectedBoardId
-    );
-    console.log("selectedBoardId", selectedBoardId)
+    const { boardId } = useParams<{ boardId: string }>();
+    const selectedBoardId = boardId ? Number(boardId) : null;
+    console.log("selectedBoardId from URL", selectedBoardId)
 
 
     const selectedCard = useAppSelector(state => state.card.selectedCard);

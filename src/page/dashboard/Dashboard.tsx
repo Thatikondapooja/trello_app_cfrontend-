@@ -153,11 +153,9 @@ const Dashboard = () => { // Deployment verified: dispatch included in useEffect
     }, [dispatch]);
 
     const handleBoardClick = (boardId: number) => {
-        console.log("dashboard")
+        console.log("Redirecting to board:", boardId);
         dispatch(selectBoard(boardId));
-        navigate("/board");
-
-
+        navigate(`/board/${boardId}`);
     };
     function handleNewBoard() {
         console.log("dash")
