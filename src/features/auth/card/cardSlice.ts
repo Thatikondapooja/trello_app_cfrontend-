@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createCard, fetchCardById, fetchCardsByList, moveCardThunk, toggleCardComplete, updateCard } from "./cardThunks";
 import { arrayMove } from "@dnd-kit/sortable";
-import { BoardCard, FullCard } from "./types";
+import { BoardCard, Checklist, ChecklistItem, FullCard } from "./types";
 import { addChecklistItem, createChecklist, deleteChecklist, toggleChecklistItem } from "../../checklists/checklistThunk";
-import Checklist from "../../checklists/checklist";
+import ChecklistComponent from "../../checklists/checklist";
 import { addMemberToCard } from "../../member/memberThunk";
 
 // interface Card {
@@ -35,13 +35,13 @@ const initialState: CardState = {
     loading: false,
     error: null,
 };
-function calculateChecklistSummary(checklists: any[]) {
+function calculateChecklistSummary(checklists: Checklist[]) {
     const total = checklists.reduce(
-        (sum, c) => sum + c.items.length,
+        (sum, c) => sum + (c.items?.length || 0),
         0
     );
     const completed = checklists.reduce(
-        (sum, c) => sum + c.items.filter(item => item.isCompleted).length,
+        (sum, c) => sum + (c.items?.filter((item: ChecklistItem) => item.isCompleted).length || 0),
         0
     );
 
