@@ -147,23 +147,23 @@ const Dashboard = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const boards = useAppSelector(state => state.board.boards);
-    console.log("boars in dashboard",boards)
+    console.log("boars in dashboard", boards)
     useEffect(() => {
         dispatch(fetchBoards());
-    }, []);
+    }, [dispatch]);
 
-    const handleBoardClick = (boardId:number) => {
+    const handleBoardClick = (boardId: number) => {
         console.log("dashboard")
         dispatch(selectBoard(boardId));
         navigate("/board");
 
-   
-     };
-function handleNewBoard(){
-    console.log("dash")
-    navigate("/board/create");
-}
-   
+
+    };
+    function handleNewBoard() {
+        console.log("dash")
+        navigate("/board/create");
+    }
+
     return (
         <div className="min-h-screen bg-slate-50">
             {/* Top Navigation Bar */}
@@ -211,9 +211,9 @@ function handleNewBoard(){
                             >
                                 <div className="h-28 bg-slate-200 group-hover:bg-indigo-50/50 transition-colors relative">
                                     <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all duration-300"></div>
-                                                        
+
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/15 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/15 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+                                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/15 rounded-full translate-y-1/2 -translate-x-1/2"></div>
                                     <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-indigo-500 opacity-50 group-hover:opacity-100 "></div>
                                 </div>
                                 <div className="p-6">
@@ -240,7 +240,7 @@ function handleNewBoard(){
                             <div className="w-12 h-12 rounded-full bg-slate-100 group-hover:bg-white flex items-center justify-center mb-4 transition-colors">
                                 <span className="text-2xl text-slate-400 group-hover:text-indigo-600">+</span>
                             </div>
-                                <Button className="text-slate-600 font-lato mt-7 bg-indigo-500 group-hover:bg-indigo-600" onClick={handleNewBoard}>New Board</Button>
+                            <Button className="text-slate-600 font-lato mt-7 bg-indigo-500 group-hover:bg-indigo-600" onClick={handleNewBoard}>New Board</Button>
                         </div>
                     </div>
                 )}

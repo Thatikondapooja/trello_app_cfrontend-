@@ -2,7 +2,7 @@ import { useState } from "react";
 import InputComponent from "../components/comman/inputComponent";
 import Button from "../components/comman/Button";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authAPI";
 // import { loginSuccess } from "../features/auth/authSlice";
 
@@ -15,7 +15,7 @@ export default function Login() {
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const user = useAppSelector((state) => state.auth.user);
+
 
     /* ---------------- VALIDATIONS ---------------- */
 
@@ -59,7 +59,7 @@ export default function Login() {
         const isPasswordValid = validatePassword();
 
         if (!isEmailValid || !isPasswordValid) return;
-         console.log("login")
+        console.log("login")
         // 🚧 TEMP (frontend-only)
         // Later we will replace this with backend API call
         // dispatch(loginSuccess({ email }));
@@ -121,7 +121,7 @@ export default function Login() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                      
+
                     </div>
 
                     {/* Password */}
@@ -135,7 +135,7 @@ export default function Login() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                      
+
                     </div>
 
                     {/* Button */}

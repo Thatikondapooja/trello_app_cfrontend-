@@ -2,8 +2,6 @@ import { useState } from "react";
 import InputComponent from "../components/comman/inputComponent";
 import Button from "../components/comman/Button";
 import { useNavigate } from "react-router-dom";
-import { registerApi } from "../services/AuthService";
-import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../app/hooks";
 import { registerUser } from "../features/auth/authAPI";
 
@@ -14,7 +12,7 @@ export default function Signup() {
 
     const [FullName, setName] = useState("")
     const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("") 
+    const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
     const [nameerror, setNameErrors] = useState("")
@@ -22,33 +20,33 @@ export default function Signup() {
     const [passworderror, setpasswordErrors] = useState("")
     const [confirmPassworderror, setConfirmPasswordErrors] = useState("")
 
-   
+
 
     /* ---------------- HANDLERS ---------------- */
 
-function names(e: React.ChangeEvent<HTMLInputElement>) {
-   const setnamee= setName(e.target.value)
-    console.log("setnamee", setnamee)
+    function names(e: React.ChangeEvent<HTMLInputElement>) {
+        const setnamee = setName(e.target.value)
+        console.log("setnamee", setnamee)
 
-}
-function emailId(e: React.ChangeEvent<HTMLInputElement>) {
-    setEmail(e.target.value)
-}
-function passwords(e: React.ChangeEvent<HTMLInputElement>) {
-    setPassword(e.target.value)
-}
-function confirmPwd(e: React.ChangeEvent<HTMLInputElement>) {
-    setConfirmPassword(e.target.value)
-}
+    }
+    function emailId(e: React.ChangeEvent<HTMLInputElement>) {
+        setEmail(e.target.value)
+    }
+    function passwords(e: React.ChangeEvent<HTMLInputElement>) {
+        setPassword(e.target.value)
+    }
+    function confirmPwd(e: React.ChangeEvent<HTMLInputElement>) {
+        setConfirmPassword(e.target.value)
+    }
 
     /* ---------------- VALIDATIONS ---------------- */
 
-    function nameValidate(){
+    function nameValidate() {
         // Name
         if (!FullName.trim()) {
             setNameErrors("Full name is required");
             return false;
-        } 
+        }
         if (FullName.length < 2) {
             setNameErrors("Name must be at least 2 characters");
             return false;
@@ -56,61 +54,61 @@ function confirmPwd(e: React.ChangeEvent<HTMLInputElement>) {
         setName('')
         return true
     }
-       
-       
-function emailValidate(){
-    // Email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) {
-        setemailErrors("Email is required");
-        return false;
-    } 
-     if (!emailRegex.test(email)) {
-        setemailErrors("Enter a valid email address");
-        return false;
-    }
-    setEmail("")
-    return true
-}
-      
-function passwordValidate(){
 
-    // Password
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{4,}$/;
-    if (!password) {
-        setpasswordErrors("Password is required");
-        return false;
-    } 
-     if (!passwordRegex.test(password)) {
-        setpasswordErrors
-            ("Password must be at least 4 characters and include letters & numbers");
-        return false;
+
+    function emailValidate() {
+        // Email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.trim()) {
+            setemailErrors("Email is required");
+            return false;
+        }
+        if (!emailRegex.test(email)) {
+            setemailErrors("Enter a valid email address");
+            return false;
+        }
+        setEmail("")
+        return true
     }
 
-    setPassword('')
-    return true
-}
-function confirmPwdValidation(){
-    // Confirm Password
-    if (!confirmPassword) {
-        setConfirmPasswordErrors("Please confirm your password");
-        return false;
-    } 
-     if (password !== confirmPassword) {
-        setConfirmPasswordErrors("Passwords do not match");
-        return false;
+    function passwordValidate() {
+
+        // Password
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{4,}$/;
+        if (!password) {
+            setpasswordErrors("Password is required");
+            return false;
+        }
+        if (!passwordRegex.test(password)) {
+            setpasswordErrors
+                ("Password must be at least 4 characters and include letters & numbers");
+            return false;
+        }
+
+        setPassword('')
+        return true
     }
-    setConfirmPassword("")
-    return true
-}
+    function confirmPwdValidation() {
+        // Confirm Password
+        if (!confirmPassword) {
+            setConfirmPasswordErrors("Please confirm your password");
+            return false;
+        }
+        if (password !== confirmPassword) {
+            setConfirmPasswordErrors("Passwords do not match");
+            return false;
+        }
+        setConfirmPassword("")
+        return true
+    }
 
     /* ---------------- SUBMIT ---------------- */
 
     const handleSignup = (e: React.FormEvent) => {
         e.preventDefault();
-      console.log("register")
+        console.log("register")
         const isName = nameValidate()
-            const isEmail = emailValidate()
+        const isEmail = emailValidate()
         const isPwd = passwordValidate()
         const isCpwd = confirmPwdValidation()
         if (!isName || !isEmail || !isPwd || !isCpwd) return
@@ -120,7 +118,7 @@ function confirmPwdValidation(){
         // 🚧 Next step: API call
         // await signupUser(formData)
 
-        dispatch(registerUser({ FullName,email,password }))
+        dispatch(registerUser({ FullName, email, password }))
             .unwrap()
             .then(() => navigate("/login"))
             .catch(() => { });
@@ -158,7 +156,7 @@ function confirmPwdValidation(){
                                     value={FullName}
                                     onChange={names}
                                 />
-                               
+
                             </div>
 
                             {/* Email */}
@@ -173,7 +171,7 @@ function confirmPwdValidation(){
                                     value={email}
                                     onChange={emailId}
                                 />
-                               
+
                             </div>
 
                             {/* Password */}
@@ -188,7 +186,7 @@ function confirmPwdValidation(){
                                     value={password}
                                     onChange={passwords}
                                 />
-                               
+
                             </div>
 
                             {/* Confirm Password */}
@@ -205,7 +203,7 @@ function confirmPwdValidation(){
                                     value={confirmPassword}
                                     onChange={confirmPwd}
                                 />
-                               
+
                             </div>
 
                             <Button
@@ -215,28 +213,28 @@ function confirmPwdValidation(){
                                 Get Started for Free
                             </Button>
                         </form>
-                        
-                    </div>    
-                     <div className="mt-2 text-center border-t border-slate-50 pt-3">
-                    <p className="text-sm text-slate-500">
-                        Already have an account?{" "}
-                        <button
-                            onClick={() => navigate("/login")}
-                            className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors"
-                        >
-                            Sign in
-                        </button>
+
+                    </div>
+                    <div className="mt-2 text-center border-t border-slate-50 pt-3">
+                        <p className="text-sm text-slate-500">
+                            Already have an account?{" "}
+                            <button
+                                onClick={() => navigate("/login")}
+                                className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors"
+                            >
+                                Sign in
+                            </button>
+                        </p>
+                    </div>
+
+                    <p className="text-[10px] text-center text-slate-400 mt-6 px-4">
+                        By clicking "Get Started", you agree to our
+                        <span className="underline cursor-pointer mx-1">Terms of Service</span>
+                        and
+                        <span className="underline cursor-pointer ml-1">Privacy Policy</span>.
                     </p>
                 </div>
-
-                <p className="text-[10px] text-center text-slate-400 mt-6 px-4">
-                    By clicking "Get Started", you agree to our
-                    <span className="underline cursor-pointer mx-1">Terms of Service</span>
-                    and
-                    <span className="underline cursor-pointer ml-1">Privacy Policy</span>.
-                </p>
             </div>
         </div>
-            </div>
     );
 }

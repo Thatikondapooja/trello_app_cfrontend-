@@ -62,7 +62,7 @@
 //                 id: Date.now().toString(),
 //                 message: `List "${listTitle}" was created`,
 //                 timestamp: Date.now(),
-               
+
 //             })
 //         );
 
@@ -88,7 +88,7 @@
 //                 id: Date.now().toString(),
 //                 message: `Card "${title}" was added`,
 //                 timestamp: Date.now(),
-              
+
 //             })
 //         );
 
@@ -122,7 +122,7 @@
 //                 id: Date.now().toString(),
 //                 message: "Card was moved to another list",
 //                 timestamp: Date.now(),
-             
+
 //             })
 //         );
 //     };
@@ -156,7 +156,7 @@
 //                         <ActivityDetailes />
 //                     </div>
 //                 </div>
-        
+
 //                 {/* Kanban Board Container */}
 //                 <div className="mt-6 mx-6 rounded-3xl bg-white/10 backdrop-blur-xl border-transparent border-white/20 shadow p-6 overflow-x-auto">
 //                     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -213,7 +213,7 @@
 
 //                                 )}
 //                             </div>
-                          
+
 //                         </div>
 
 //                         {/* 🎨 Beautiful Drag Overlay */}
@@ -228,7 +228,7 @@
 //                     </DndContext>
 //                 </div>
 //             </div>
-          
+
 //             {/* ===== ACTIVITY PANEL =====
 //             <div className="w-[340px] shrink-0 m-6 rounded-3xl bg-white/90 backdrop-blur-xl shadow-2xl border border-white/30 flex flex-col">
 
@@ -265,7 +265,6 @@ import ListColumn from "../../../component/kanban/ListCloumns";
 import ActivityDetailes from "../../../component/activity/ActivityDetails";
 import { createList, fetchLists } from "../list/listThunks";
 import { createCard, fetchCardById, fetchCardsByList, moveCardThunk } from "../card/cardThunks";
-import { arrayMove } from "@dnd-kit/sortable";
 import { clearSelectedCard, reorderCards } from "../card/cardSlice";
 import CardDetailsModal from "../card/CardDetailsModel";
 export default function BoardView() {
@@ -300,7 +299,7 @@ export default function BoardView() {
 
     useEffect(() => {
         if (selectedBoardId) {
-           dispatch(fetchLists(Number(selectedBoardId)));
+            dispatch(fetchLists(Number(selectedBoardId)));
 
         }
     }, [selectedBoardId, dispatch]);
@@ -313,7 +312,7 @@ export default function BoardView() {
     }, [lists, dispatch]);
 
 
-    
+
 
     if (!selectedBoardId) {
         return (
@@ -333,16 +332,16 @@ export default function BoardView() {
 
     // Handlers (Functionality kept exactly the same as requested)
     const handleAddList = () => {
-       console.log("hello")
-            if (!listTitle || !selectedBoardId) return;
+        console.log("hello")
+        if (!listTitle || !selectedBoardId) return;
         console.log("hello y")
 
-            dispatch(
-                createList({
-                    title: listTitle,
-                    boardId: Number(selectedBoardId),
-                })
-            );
+        dispatch(
+            createList({
+                title: listTitle,
+                boardId: Number(selectedBoardId),
+            })
+        );
 
         // dispatch(addList({ id: Date.now().toString(), boardId: selectedBoardId, title: listTitle }));
         dispatch(addActivity({ id: Date.now().toString(), message: `List "${listTitle}" created`, timestamp: Date.now() }));
@@ -418,11 +417,11 @@ export default function BoardView() {
         );
     };
 
-   
+
     const handleCardClick = (cardId: number) => {
-    
+
         dispatch(fetchCardById(cardId));
-       
+
     };
 
 
@@ -481,7 +480,7 @@ export default function BoardView() {
                                     onChange={(e) => setListTitle(e.target.value)}
                                     placeholder="Enter title..."
                                     className="mb-3"
-                                   
+
                                 />
                                 <div className="flex gap-2">
                                     <Button onClick={handleAddList} className=" px-4 py-2 text-sm font-lato text-white">Add List</Button>

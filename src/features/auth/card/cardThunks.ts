@@ -3,7 +3,6 @@ import { BoardCard, SaveCardOrderPayload } from "./types";
 
 import {
     createCardApi,
-    fetchCardsByListApi,
     moveCardApi,
     saveCardOrderApi,
     updateCardApi,
