@@ -3,7 +3,6 @@ import { createCard, fetchCardById, fetchCardsByList, moveCardThunk, toggleCardC
 import { arrayMove } from "@dnd-kit/sortable";
 import { BoardCard, Checklist, ChecklistItem, FullCard } from "./types";
 import { addChecklistItem, createChecklist, deleteChecklist, toggleChecklistItem } from "../../checklists/checklistThunk";
-import ChecklistComponent from "../../checklists/checklist";
 import { addMemberToCard } from "../../member/memberThunk";
 
 // interface Card {
