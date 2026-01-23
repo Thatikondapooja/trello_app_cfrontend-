@@ -143,7 +143,7 @@ import { fetchBoards } from "../../features/auth/board/boardThunks";
 import Button from "../../components/comman/Button";
 import { selectBoard } from "../../features/auth/board/boardSlice";
 
-const Dashboard = () => {
+const Dashboard = () => { // Deployment verified: dispatch included in useEffect dependency
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const boards = useAppSelector(state => state.board.boards);
