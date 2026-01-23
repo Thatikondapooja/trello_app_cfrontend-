@@ -256,6 +256,7 @@
 
 
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { DndContext, DragEndEvent, DragStartEvent, DragOverlay } from "@dnd-kit/core";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { addActivity } from "../../activity/activitySlice";
