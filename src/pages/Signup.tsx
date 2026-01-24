@@ -95,6 +95,7 @@ export default function Signup() {
             setConfirmPasswordErrors("Passwords do not match");
             return false;
         }
+        setConfirmPassword("")
         return true
     }
 
