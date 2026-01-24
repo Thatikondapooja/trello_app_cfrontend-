@@ -4,18 +4,11 @@ export function formatDueDate(dateString: string) {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return "";
 
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-    // Use UTC methods to get parts exactly as stored in DB
-    const month = months[date.getUTCMonth()];
-    const day = date.getUTCDate();
-    let hours = date.getUTCHours();
-    const minutes = date.getUTCMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    const minutesStr = minutes < 10 ? '0' + minutes : minutes;
-
-    return `${month} ${day}, ${hours}:${minutesStr} ${ampm}`;
+    return date.toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+    });
 }

@@ -69,11 +69,14 @@ export default function CardDetailsModal({ card, onClose }: Props) {
     const saveDueDate = () => {
         if (!dueDate) return;
 
+        // Combine date and time into a Date object to get correct UTC ISO string
+        const combinedDateTime = new Date(`${dueDate}T${dueTime}`);
+
         dispatch(
             updateCard({
                 id: card.id,
                 data: {
-                    dueDate: `${dueDate}T${dueTime}`,
+                    dueDate: isNaN(combinedDateTime.getTime()) ? null : combinedDateTime.toISOString(),
                     reminderMinutes: reminderMinutes === 0 ? null : reminderMinutes,
                 },
             })
