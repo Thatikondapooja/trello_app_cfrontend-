@@ -109,7 +109,7 @@ export default function CardDetailsModal({ card, onClose }: Props) {
 
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl w-[900px] max-w-full max-h-full overflow-y-auto p-6 shadow-xl custom-scrollbar">
+            <div className="bg-white rounded-xl w-[900px] max-w-full max-h-[95vh] overflow-y-auto p-6 pb-12 shadow-xl custom-scrollbar">
 
                 {/* Header */}
                 <div className="flex justify-between items-center mb-4">

@@ -37,9 +37,19 @@ interface AuthState {
 }
 
 const storedUser = localStorage.getItem("user");
+let initialUser = null;
+
+try {
+    if (storedUser && storedUser !== "undefined") {
+        initialUser = JSON.parse(storedUser);
+    }
+} catch (e) {
+    console.error("Failed to parse stored user", e);
+    localStorage.removeItem("user");
+}
 
 const initialState: AuthState = {
-    user: storedUser ? JSON.parse(storedUser) : null,
+    user: initialUser,
     token: localStorage.getItem("access_token"),
     loading: false,
     error: null,
@@ -64,20 +74,27 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload.user;
+                // action.payload is flat { accessToken, FullName, userId, etc. }
+                const userData = {
+                    id: action.payload.userId,
+                    FullName: action.payload.FullName,
+                    email: action.payload.email
+                };
+                state.user = userData;
                 state.token = action.payload.accessToken;
 
-                localStorage.setItem("user", JSON.stringify(action.payload.user));
+                localStorage.setItem("user", JSON.stringify(userData));
                 localStorage.setItem(
                     "access_token",
                     action.payload.accessToken
                 );
-                state.token = action.payload.refreshToken;
 
-                localStorage.setItem(
-                    "refresh_token",
-                    action.payload.refreshToken
-                );
+                if (action.payload.refreshToken) {
+                    localStorage.setItem(
+                        "refresh_token",
+                        action.payload.refreshToken
+                    );
+                }
 
             })
             .addCase(loginUser.rejected, (state, action: any) => {
