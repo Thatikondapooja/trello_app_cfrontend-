@@ -36,9 +36,11 @@ interface AuthState {
     error: string | null;
 }
 
+const storedUser = localStorage.getItem("user");
+
 const initialState: AuthState = {
-    user: null,
-    token: null,
+    user: storedUser ? JSON.parse(storedUser) : null,
+    token: localStorage.getItem("access_token"),
     loading: false,
     error: null,
 };
@@ -65,6 +67,7 @@ const authSlice = createSlice({
                 state.user = action.payload.user;
                 state.token = action.payload.accessToken;
 
+                localStorage.setItem("user", JSON.stringify(action.payload.user));
                 localStorage.setItem(
                     "access_token",
                     action.payload.accessToken
