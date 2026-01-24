@@ -117,7 +117,7 @@ export default function Signup() {
 
         dispatch(registerUser({ FullName, email, password }))
             .unwrap()
-            .then(() => navigate("/login"))
+            .then(() => navigate("/"))
             .catch(() => { });
     };
 
@@ -216,7 +216,7 @@ export default function Signup() {
                         <p className="text-sm text-slate-500">
                             Already have an account?{" "}
                             <button
-                                onClick={() => navigate("/login")}
+                                onClick={() => navigate("/")}
                                 className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors"
                             >
                                 Sign in
