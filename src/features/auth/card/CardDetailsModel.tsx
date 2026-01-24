@@ -37,9 +37,24 @@ interface Props {
 export default function CardDetailsModal({ card, onClose }: Props) {
     const dispatch = useAppDispatch();
 
+    const getLocalParts = (dateStr: string | null | undefined) => {
+        if (!dateStr) return { date: "", time: "18:00" };
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return { date: "", time: "18:00" };
+
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        const hours = String(d.getHours()).padStart(2, "0");
+        const minutes = String(d.getMinutes()).padStart(2, "0");
+
+        return { date: `${year}-${month}-${day}`, time: `${hours}:${minutes}` };
+    };
+
+    const initialParts = getLocalParts(card.dueDate);
     const [description, setDescription] = useState(card.description ?? "");
-    const [dueDate, setDueDate] = useState(card.dueDate?.slice(0, 10) ?? "");
-    const [dueTime, setDueTime] = useState(card.dueDate?.slice(11, 16) ?? "18:00");
+    const [dueDate, setDueDate] = useState(initialParts.date);
+    const [dueTime, setDueTime] = useState(initialParts.time);
     const [reminderMinutes, setReminderMinutes] = useState<number>(
         card.reminderMinutes ?? 0
     );
