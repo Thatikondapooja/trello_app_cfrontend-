@@ -147,6 +147,8 @@ const Dashboard = () => { // Deployment verified: dispatch included in useEffect
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const boards = useAppSelector(state => state.board.boards);
+    const user = useAppSelector(state => state.auth.user);
+
     console.log("boars in dashboard", boards)
     useEffect(() => {
         dispatch(fetchBoards());
@@ -172,7 +174,13 @@ const Dashboard = () => { // Deployment verified: dispatch included in useEffect
                     </div>
                     <span className="text-lg font-bold  font-lato text-slate-900 tracking-tight">Trello Clone</span>
                 </div>
-                {/* <div className="w-8 h-8 rounded-full bg-slate-200 border border-slate-300"></div> */}
+                {user && (
+                    <div className="w-9 h-9 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center shadow-sm">
+                        <span className="text-indigo-700 font-bold text-sm">
+                            {(user.FullName || user.email || 'U')[0].toUpperCase()}
+                        </span>
+                    </div>
+                )}
             </nav>
 
             <div className="max-w-7xl mx-auto px-8 py-12">

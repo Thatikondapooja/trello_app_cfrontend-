@@ -51,7 +51,6 @@ export default function Signup() {
             setNameErrors("Name must be at least 2 characters");
             return false;
         }
-        setName('')
         return true
     }
 
@@ -67,7 +66,6 @@ export default function Signup() {
             setemailErrors("Enter a valid email address");
             return false;
         }
-        setEmail("")
         return true
     }
 
@@ -85,7 +83,6 @@ export default function Signup() {
             return false;
         }
 
-        setPassword('')
         return true
     }
     function confirmPwdValidation() {
@@ -98,7 +95,6 @@ export default function Signup() {
             setConfirmPasswordErrors("Passwords do not match");
             return false;
         }
-        setConfirmPassword("")
         return true
     }
 

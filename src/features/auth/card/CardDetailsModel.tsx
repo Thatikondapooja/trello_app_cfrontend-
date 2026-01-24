@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../../app/hooks";
-import {  toggleCardComplete, updateCard } from "./cardThunks";
+import { toggleCardComplete, updateCard } from "./cardThunks";
 import { addActivity } from "../../activity/activitySlice";
 import Checklist from "../../checklists/checklist";
 import { createChecklist } from "../../checklists/checklistThunk";
@@ -20,7 +20,7 @@ const LABEL_COLORS: Record<LabelColor, string> = {
 };
 
 
-const LABEL_PRESETS: { name: string; color: LabelColor } [] = [
+const LABEL_PRESETS: { name: string; color: LabelColor }[] = [
     { name: "Bug", color: "red" },
     { name: "Urgent", color: "orange" },
     { name: "Frontend", color: "blue" },
@@ -39,7 +39,7 @@ export default function CardDetailsModal({ card, onClose }: Props) {
 
     const [description, setDescription] = useState(card.description ?? "");
     const [dueDate, setDueDate] = useState(card.dueDate?.slice(0, 10) ?? "");
-    const [dueTime, setDueTime] = useState("18:00");
+    const [dueTime, setDueTime] = useState(card.dueDate?.slice(11, 16) ?? "18:00");
     const [reminderMinutes, setReminderMinutes] = useState<number>(
         card.reminderMinutes ?? 0
     );
@@ -104,7 +104,7 @@ export default function CardDetailsModal({ card, onClose }: Props) {
         );
         setActivePopover("checklist")
         setChecklistTitle("");
- 
+
     };
 
     return (
@@ -122,16 +122,16 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                         />
                         <h2 className="font-bold text-lg">{card.title}</h2>
                     </label>
-                  
-                    
-                
-                <div className="flex gap-4 items-center">
-                    {card.members && card.members.length > 0 && (
-                        <CardMemberAvatars members={card.members} />
-                    )}
-                    <button onClick={onClose} className="text-xl mt-1">✕</button>
 
-                </div> 
+
+
+                    <div className="flex gap-4 items-center">
+                        {card.members && card.members.length > 0 && (
+                            <CardMemberAvatars members={card.members} />
+                        )}
+                        <button onClick={onClose} className="text-xl mt-1">✕</button>
+
+                    </div>
                 </div>
                 {/* Description */}
                 <textarea
@@ -143,37 +143,52 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                 />
 
                 {/* Toolbar */}
-                <div className="flex flex-wrap gap-2 mt-3 items-center">
-                    <input
-                        type="date"
-                        value={dueDate}
-                        onChange={(e) => setDueDate(e.target.value)}
-                        className="border h-9 px-2 rounded text-sm"
-                    />
+                <div className="flex flex-wrap gap-3 mt-4 items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <div className="flex flex-col gap-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Due Date</label>
+                        <input
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => {
+                                setDueDate(e.target.value);
+                                e.target.blur();
+                            }}
+                            className="border border-slate-200 h-10 px-3 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all cursor-pointer bg-white"
+                        />
+                    </div>
 
-                    <input
-                        type="time"
-                        value={dueTime}
-                        onChange={(e) => setDueTime(e.target.value)}
-                        className="border h-9 px-2 rounded text-sm"
-                    />
+                    <div className="flex flex-col gap-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Time</label>
+                        <input
+                            type="time"
+                            value={dueTime}
+                            onChange={(e) => {
+                                setDueTime(e.target.value);
+                                e.target.blur();
+                            }}
+                            className="border border-slate-200 h-10 px-3 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all cursor-pointer bg-white"
+                        />
+                    </div>
 
-                    <select
-                        value={reminderMinutes}
-                        onChange={(e) => setReminderMinutes(Number(e.target.value))}
-                        className="border h-9 px-2 rounded text-sm"
-                    >
-                        <option value={0}>No reminder</option>
-                        <option value={1440}>1 day before</option>
-                        <option value={60}>1 hour before</option>
-                        <option value={1}>1 minute before</option>
-                    </select>
+                    <div className="flex flex-col gap-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Reminder</label>
+                        <select
+                            value={reminderMinutes}
+                            onChange={(e) => setReminderMinutes(Number(e.target.value))}
+                            className="border border-slate-200 h-10 px-3 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all cursor-pointer bg-white"
+                        >
+                            <option value={0}>No reminder</option>
+                            <option value={1440}>1 day before</option>
+                            <option value={60}>1 hour before</option>
+                            <option value={1}>1 minute before</option>
+                        </select>
+                    </div>
 
                     <button
                         onClick={saveDueDate}
-                        className="h-9 text-sm bg-indigo-50 text-gray-600 px-3 rounded"
+                        className="mt-5 h-10 text-sm bg-indigo-600 hover:bg-indigo-700 text-white px-5 rounded-lg font-semibold shadow-md shadow-indigo-200 transition-all transform active:scale-95"
                     >
-                        Save Due Date
+                        Save Changes
                     </button>
 
                     {/* Add checklist */}
@@ -241,8 +256,8 @@ export default function CardDetailsModal({ card, onClose }: Props) {
                             key={label.name}
                             onClick={() => toggleLabel(label)}
                             className={`${LABEL_COLORS[label.color]} px-3 py-1 text-xs rounded text-white ${labels.some((l) => l.name === label.name)
-                                    ? "opacity-100"
-                                    : "opacity-40"
+                                ? "opacity-100"
+                                : "opacity-40"
                                 }`}
                         >
                             {label.name}

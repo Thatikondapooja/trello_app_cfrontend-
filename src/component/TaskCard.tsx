@@ -66,17 +66,6 @@ export default function TaskCard({ card, onClick }: Props) {
             )} */}
 
 
-            {card.dueDate && (
-                <div className="flex items-center gap-1 mt-2 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded w-fit">
-                    <Clock size={12} />
-                    {formatDueDate(card.dueDate)}
-                </div>
-            )}
-            {card.reminderMinutes && card.dueDate && (
-                <p className="text-sm text-gray-600 mt-2">
-                    ⏰ Reminder set {card.reminderMinutes} minutes before due date
-                </p>
-            )}
 
             {/* <div className="flex gap-1 flex-wrap mt-1">
                 {card.isCompleted && (
@@ -102,16 +91,19 @@ export default function TaskCard({ card, onClick }: Props) {
                 ))}
             </div>
             {card.dueDate && (
-                <span
-                    className={`text-xs px-2 py-1 rounded text-white ${card.isCompleted
-                        ? "bg-green-500"
+                <div className="flex items-center gap-1.5 mt-3">
+                    <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-[11px] font-bold tracking-wide transition-colors ${card.isCompleted
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-100"
                         : new Date(card.dueDate) < new Date()
-                            ? "bg-red-500"
-                            : "bg-slate-400"
-                        }`}
-                >
-                    {card.isCompleted ? "Completed" : formatDueDate(card.dueDate)}
-                </span>
+                            ? "bg-rose-50 text-rose-700 border-rose-100"
+                            : "bg-indigo-50 text-indigo-700 border-indigo-100"
+                        }`}>
+                        <Clock size={12} strokeWidth={2.5} />
+                        <span>
+                            {card.isCompleted ? "COMPLETED" : formatDueDate(card.dueDate).toUpperCase()}
+                        </span>
+                    </div>
+                </div>
             )}
 
             {/* {card.members && card.members.length > 0 && (
