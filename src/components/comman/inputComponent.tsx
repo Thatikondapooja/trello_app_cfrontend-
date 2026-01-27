@@ -5,6 +5,9 @@ interface InputProps {
     type?: string;
     className?: string;
     name?:string;
+    inputId?:string;
+    inputType?:string;
+    inputmode?:string;
 }
 
 export default function InputComponent({ value, onChange, placeholder, type = "text", className = "", name="text" }: InputProps) {

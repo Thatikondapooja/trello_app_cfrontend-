@@ -268,6 +268,7 @@ import { createList, fetchLists } from "../list/listThunks";
 import { createCard, fetchCardById, fetchCardsByList, moveCardThunk } from "../card/cardThunks";
 import { clearSelectedCard, reorderCards } from "../card/cardSlice";
 import CardDetailsModal from "../card/CardDetailsModel";
+import { ChevronLeft } from "lucide-react";
 export default function BoardView() {
     const dispatch = useAppDispatch();
     const [listTitle, setListTitle] = useState("");
@@ -425,19 +426,29 @@ export default function BoardView() {
         dispatch(fetchCardById(cardId));
 
     };
-
+    function handleGoBack() {
+        window.history.back();
+    }
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col h-screen overflow-hidden">
             {/* Header */}
             <header className="bg-white border-b border-slate-200 px-8 py-3 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 ml-11">
+                        {/* <div onClick={handleGoBack} className="cursor-pointer animate-bounce"><ChevronLeft /></div> */}
+                        <div
+                            onClick={handleGoBack}
+                            className=" fixed left-4 top-6 -translate-y-1/2 cursor-pointer p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition animate-bounce">
+                            <ChevronLeft size={24} />
+                        </div>
+
                         <div className="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100 ">
                             <svg className="w-5 h-5 text-indigo-600 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 0v10" />
                             </svg>
                         </div>
+
                         <div>
                             <h1 className="md:text-xl text-xs  font-bold text-slate-900 leading-none">Project Workspace</h1>
                             <p className="md:text-xs text-slate-500 mt-1 uppercase tracking-widest font-semibold">{lists.length} Columns</p>
@@ -486,7 +497,7 @@ export default function BoardView() {
 
                                 />
                                 <div className="flex gap-2">
-                                    <Button onClick={handleAddList} className=" px-4 py-2 text-sm font-lato text-white">Add List</Button>
+                                    <Button onClick={handleAddList} className=" px-4 py-2 text-sm font-lato text-white  ">Add List</Button>
                                     <button onClick={() => setIsAddingList(false)} className="px-3 text-slate-400 hover:text-slate-600">✕</button>
                                 </div>
                             </div>

@@ -141,18 +141,23 @@ export default function Login() {
                     {/* Button */}
                     <Button
                         type="submit"
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl"
-                    >
-                        Continue
-                    </Button>
+                        className="w-full bg-indigo-500 text-xl text-white hover:bg-indigo-700   py-2 rounded-xl" >continue</Button>
+
+
+                   
                 </form>
 
                 {/* Footer */}
                 <div className="mt-6 text-center">
-                    <button className="text-sm text-indigo-600 hover:underline">
+                    {/* <button className="text-sm text-indigo-600 hover:underline">
                         Forgot password?
-                    </button>
-
+                    </button> */}
+                            <a
+                                href="/forgot-password"
+                               className="text-sm text-indigo-600 hover:underline"
+                            >
+                                Forgot password?
+                            </a>
                     <p className="text-sm text-slate-500 mt-4">
                         Don’t have an account?{" "}
                         <button

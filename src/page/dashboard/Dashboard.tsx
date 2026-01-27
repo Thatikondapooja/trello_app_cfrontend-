@@ -246,7 +246,7 @@ const Dashboard = () => { // Deployment verified: dispatch included in useEffect
                             <div className="w-12 h-12 rounded-full bg-slate-100 group-hover:bg-white flex items-center justify-center mb-4 transition-colors">
                                 <span className="text-2xl text-slate-400 group-hover:text-indigo-600">+</span>
                             </div>
-                            <Button className="text-slate-600 font-lato mt-7 bg-indigo-500 group-hover:bg-indigo-600" onClick={handleNewBoard}>New Board</Button>
+                            <Button className="text-slate-600 font-lato mt-7 bg-indigo-500 group-hover:bg-indigo-600" onClick={handleNewBoard} >New Board</Button>
                         </div>
                     </div>
                 )}

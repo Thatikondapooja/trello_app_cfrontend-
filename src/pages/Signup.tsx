@@ -95,8 +95,7 @@ export default function Signup() {
             setConfirmPasswordErrors("Passwords do not match");
             return false;
         }
-        setConfirmPassword("")
-        return true
+       return true
     }
 
     /* ---------------- SUBMIT ---------------- */
@@ -206,9 +205,8 @@ export default function Signup() {
                             <Button
                                 type="submit"
                                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl"
-                            >
-                                Get Started for Free
-                            </Button>
+                        >Get Started for Free</Button>
+                           
                         </form>
 
                     </div>
