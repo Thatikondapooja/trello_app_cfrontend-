@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../../app/hooks";
-import { archiveCardThunk, toggleCardComplete, updateCard } from "./cardThunks";
+import { toggleCardComplete, updateCard } from "./cardThunks";
 import { addActivity } from "../../activity/activitySlice";
 import Checklist from "../../checklists/checklist";
 import { createChecklist } from "../../checklists/checklistThunk";
@@ -8,7 +8,6 @@ import CardMembers from "./CardMembers";
 import { FullCard, Label } from "./types";
 import { LabelColor } from "./label.types";
 import CardMemberAvatars from "./CardMemberAvatars";
-import { clearSelectedCard } from "./cardSlice";
 
 
 /* Label colors */
@@ -126,17 +125,17 @@ export default function CardDetailsModal({ card, onClose }: Props) {
 
     };
 
-//     const handleArchive = () => {
-//   dispatch(archiveCardThunk(card.id));
-//   dispatch(
-//     addActivity({
-//       id: Date.now().toString(),
-//       message: `Card "${card.title}" archived`,
-//       timestamp: Date.now(),
-//     })
-//   );
-//   dispatch(clearSelectedCard());
-// };
+    //     const handleArchive = () => {
+    //   dispatch(archiveCardThunk(card.id));
+    //   dispatch(
+    //     addActivity({
+    //       id: Date.now().toString(),
+    //       message: `Card "${card.title}" archived`,
+    //       timestamp: Date.now(),
+    //     })
+    //   );
+    //   dispatch(clearSelectedCard());
+    // };
 
 
     return (
@@ -314,10 +313,10 @@ export default function CardDetailsModal({ card, onClose }: Props) {
 
 
 
-    </div>
-     
+        </div>
 
-     
+
+
 
     );
 }

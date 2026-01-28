@@ -88,7 +88,7 @@ export const updateCard = createAsyncThunk(
     ) => {
         try {
             const res = await updateCardApi(payload.id, payload.data);
-            return res.data;    
+            return res.data;
 
         } catch {
             return rejectWithValue("Failed to update card");
@@ -115,17 +115,17 @@ export const toggleCardComplete = createAsyncThunk(
 
 
 export const archiveCardThunk = createAsyncThunk(
-  "cards/archive",
-  async (cardId: number) => {
-    await archiveCardAPI(cardId);
-    return cardId;
-  }
+    "cards/archive",
+    async (cardId: number) => {
+        await archiveCardAPI(cardId);
+        return cardId;
+    }
 );
 
 export const restoreCardThunk = createAsyncThunk(
-  "cards/restore",
-  async (cardId: number) => {
-    await restoreCardAPI(cardId);
-    return cardId;
-  }
+    "cards/restore",
+    async (cardId: number) => {
+        await restoreCardAPI(cardId);
+        return cardId;
+    }
 );

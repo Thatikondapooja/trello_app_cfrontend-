@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "./app/hooks";
-import { createBoard } from "./features/auth/board/boardThunks";
+import { useAppDispatch } from "../../../app/hooks";
+import { createBoard } from "./boardThunks";
 
 const CreateBoard = () => {
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ const CreateBoard = () => {
         }
 
         try {
-           const createboarddispatch= await dispatch(
+            const createboarddispatch = await dispatch(
                 createBoard({ title, description })
             ).unwrap();
             console.log("createboarddispatch", createboarddispatch)

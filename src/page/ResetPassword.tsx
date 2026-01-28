@@ -18,9 +18,10 @@ export default function ResetPassword() {
 
             navigate("/");
         } catch (error) {
-             if (axios.isAxiosError(error)) {
-            toast.error(error.response?.data?.message || "Reset failed");
-        }}
+            if (axios.isAxiosError(error)) {
+                toast.error(error.response?.data?.message || "Reset failed");
+            }
+        }
     };
 
     return (
@@ -28,23 +29,23 @@ export default function ResetPassword() {
 
             <div className="flex flex-col items-center p-10 border-transparent bg-white rounded-md  text-blue-800 font-lato">
 
-            <h2 className="text-xl font-semibold mb-4">Reset Password</h2>
+                <h2 className="text-xl font-semibold mb-4">Reset Password</h2>
 
-            <InputComponent
-                className="border p-2 rounded w-full"
-                placeholder="New Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
+                <InputComponent
+                    className="border p-2 rounded w-full"
+                    placeholder="New Password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
 
-            <button
-                className="mt-4 bg-indigo-600  hover:bg-indigo-700 text-white rounded px-4 py-2"
-                onClick={handleReset}
-            >
-                Update Password
-            </button>
-        </div>
+                <button
+                    className="mt-4 bg-indigo-600  hover:bg-indigo-700 text-white rounded px-4 py-2"
+                    onClick={handleReset}
+                >
+                    Update Password
+                </button>
+            </div>
         </div>
     );
 }

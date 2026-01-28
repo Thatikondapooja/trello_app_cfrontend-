@@ -20,10 +20,10 @@ export const createList = createAsyncThunk(
 
 export const fetchLists = createAsyncThunk(
     "list/fetch",
-    async (boardId:number, { rejectWithValue }) => {
+    async (boardId: number, { rejectWithValue }) => {
         try {
             const res = await fetchListsApi(boardId);
-            console.log("res fetch" , res)
+            console.log("res fetch", res)
             console.log("res fetch", res.data)
             return res.data;
         } catch (err: any) {

@@ -268,7 +268,7 @@ import { createList, fetchLists } from "../list/listThunks";
 import { createCard, fetchCardById, fetchCardsByList, moveCardThunk } from "../card/cardThunks";
 import { clearSelectedCard, reorderCards } from "../card/cardSlice";
 import CardDetailsModal from "../card/CardDetailsModel";
-import { ArchiveRestore, ChevronLeft, Settings } from "lucide-react";
+import { ArchiveRestore, ChevronLeft } from "lucide-react";
 import UserDropdown from "./userDropDown";
 import ArchivedCardsPanel from "../card/ArchivedCardsPanel";
 export default function BoardView() {

@@ -21,7 +21,7 @@ export interface Checklist {
 
 /* ---------- Card shown on board ---------- */
 export interface BoardCard {
-  isArchived: boolean; 
+  isArchived: boolean;
   id: number;
   title: string;
   description: string | null;
@@ -30,9 +30,9 @@ export interface BoardCard {
   isCompleted: boolean;
   labels: Label[];
   listId: number;
-  position:number;
-  reminderSent:boolean;
-  selectedCard:null,
+  position: number;
+  reminderSent: boolean;
+  selectedCard: null,
   members?: {
     id: number;
     FullName: string;
@@ -71,6 +71,6 @@ export interface CardState {
   error: string | null;
 }
 export interface SaveCardOrderPayload {
-    listId: number;          // Which list was reordered
-    orderedCardIds: number[]; // New order of cards in that list
+  listId: number;          // Which list was reordered
+  orderedCardIds: number[]; // New order of cards in that list
 }

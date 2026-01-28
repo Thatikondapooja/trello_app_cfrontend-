@@ -13,7 +13,7 @@ export default function SendOtp() {
     const location = useLocation();
     // Safely extract email from location state
     const email = (location.state as { email: string })?.email || 'your email';
-console.log("email from sendotp page ", email)
+    console.log("email from sendotp page ", email)
     const handleVerifyOtp = async () => {
         if (!otp) return toast.error("Enter OTP!");
         try {
@@ -87,9 +87,9 @@ console.log("email from sendotp page ", email)
                                     placeholder="Enter 6-digit OTP"
                                     value={otp}
                                     onChange={(e) => setOtp(e.target.value)}
-                                    // Professional Input Style
-                                    
-/>
+                                // Professional Input Style
+
+                                />
                             </div>
                         </div>
 
@@ -97,11 +97,11 @@ console.log("email from sendotp page ", email)
                         <div className='w-full px-2 md:px-6  '>
                             <Button
                                 onClick={handleVerifyOtp}
-                        
+
                                 type="button"
                                 className="bg-indigo-600"
-                                // Professional button styling/>
-                                >Verify OTP</Button>
+                            // Professional button styling/>
+                            >Verify OTP</Button>
                         </div>
                     </form>
                 </div>

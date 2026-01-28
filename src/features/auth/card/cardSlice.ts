@@ -90,7 +90,7 @@ const cardSlice = createSlice({
         },
         clearSelectedCard(state) {
             state.selectedCard = null;
-            },
+        },
 
 
         // updateCard: (state, action) => {
@@ -335,17 +335,18 @@ const cardSlice = createSlice({
             })
 
 
-.addCase(archiveCardThunk.fulfilled, (state, action) => {
-  const card = state.cards.find(c => c.id === action.payload);
-  if (card) card.isArchived = true;
-})
+            .addCase(archiveCardThunk.fulfilled, (state, action) => {
+                const card = state.cards.find(c => c.id === action.payload);
+                if (card) card.isArchived = true;
+            })
 
-.addCase(restoreCardThunk.fulfilled, (state, action) => {
-  const card = state.cards.find(c => c.id === action.payload);
-  if (card) card.isArchived = false;
-}
+            .addCase(restoreCardThunk.fulfilled, (state, action) => {
+                const card = state.cards.find(c => c.id === action.payload);
+                if (card) card.isArchived = false;
+            }
 
- ) },
+            )
+    },
 
 
 });

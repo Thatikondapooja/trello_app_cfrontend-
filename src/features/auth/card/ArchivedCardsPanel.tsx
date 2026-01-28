@@ -4,7 +4,7 @@ import { restoreCardThunk } from "./cardThunks";
 
 interface Props {
   onClose: () => void;
-//   onClick: () => void;
+  //   onClick: () => void;
 }
 
 export default function ArchivedCardsPanel({ onClose }: Props) {
@@ -31,21 +31,21 @@ export default function ArchivedCardsPanel({ onClose }: Props) {
           className="border rounded-lg p-3 mb-2 flex justify-between items-center"
         >
           <span className="text-sm">{card.title}</span>
-         <button
-  className="text-blue-600 text-xs"
-  onClick={() => {
-    dispatch(restoreCardThunk(card.id));
-    dispatch(
-      addActivity({
-        id: Date.now().toString(),
-        message: `Card "${card.title}" restored`,
-        timestamp: Date.now(),
-      })
-    );
-  }}
->
-  Restore
-</button>
+          <button
+            className="text-blue-600 text-xs"
+            onClick={() => {
+              dispatch(restoreCardThunk(card.id));
+              dispatch(
+                addActivity({
+                  id: Date.now().toString(),
+                  message: `Card "${card.title}" restored`,
+                  timestamp: Date.now(),
+                })
+              );
+            }}
+          >
+            Restore
+          </button>
 
         </div>
       ))}
