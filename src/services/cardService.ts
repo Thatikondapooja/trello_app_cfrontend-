@@ -28,18 +28,21 @@ export const moveCardApi = (data: {
     };
 
 
-export const updateCardApi = (id: number, payload: Partial<BoardCard>) =>
-{    
-    api.patch(`/cards/${id}`, payload);
-}
+export const updateCardApi = (
+  id: number,
+  payload: Partial<BoardCard>
+) => {
+  return api.patch(`/cards/${id}`, payload).then(res => res.data);
+};
 
-export const archiveCardAPI = (cardId: number) =>{
+
+export const archiveCardAPI = (cardId: number) =>
   api.patch(`/cards/${cardId}/archive`);
 
-}
+
 
 export const restoreCardAPI = (cardId: number) =>
-{  api.patch(`/cards/${cardId}/restore`);}
+  api.patch(`/cards/${cardId}/restore`);
 
 export const getArchivedCardsAPI = (boardId: number) =>
-  {api.get(`/cards/archived/${boardId}`);}
+  api.get(`/cards/archived/${boardId}`)
