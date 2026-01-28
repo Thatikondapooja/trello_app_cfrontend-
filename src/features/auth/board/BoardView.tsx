@@ -507,6 +507,7 @@ const [showArchived, setShowArchived] = useState(false);
                             listId={(list.id)}
                             title={list.title}
                             cards={cards.filter((card) => card.listId === list.id && !card.isArchived)}
+                            //!card.isArchived this is hide archieved cards
                             cardTitles={cardTitles}
                             setCardTitles={setCardTitles}
                             onAddCard={handleAddCard}
