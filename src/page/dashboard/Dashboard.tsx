@@ -138,16 +138,18 @@
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
 // import { selectBoard } from "../../features/auth/board/boardSlice";
-import { useEffect } from "react";
 import { fetchBoards } from "../../features/auth/board/boardThunks";
 import Button from "../../components/comman/Button";
 import { selectBoard } from "../../features/auth/board/boardSlice";
-
+import UserDropdown from "../../features/auth/board/userDropDown";
+import ActivityDetails from "../../component/activity/ActivityDetails";
+import { useEffect, useState } from "react";
 const Dashboard = () => { // Deployment verified: dispatch included in useEffect dependency
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const boards = useAppSelector(state => state.board.boards);
     const user = useAppSelector(state => state.auth.user);
+const[isOpen, setIsOpen] = useState(false);
 
     console.log("boars in dashboard", boards)
     useEffect(() => {
@@ -174,13 +176,32 @@ const Dashboard = () => { // Deployment verified: dispatch included in useEffect
                     </div>
                     <span className="text-lg font-bold  font-lato text-slate-900 tracking-tight">Trello Clone</span>
                 </div>
-                {user && (
-                    <div className="w-9 h-9 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center shadow-sm">
-                        <span className="text-indigo-700 font-bold text-sm">
-                            {(user.FullName || user.email || 'U')[0].toUpperCase()}
-                        </span>
-                    </div>
-                )}
+               <div className="flex items-center gap-4">
+                    <ActivityDetails />
+                    {user && (
+                        <div className="relative">
+                            <div 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsOpen(!isOpen);
+                                }}
+                                className="w-9 h-9 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shadow-sm cursor-pointer hover:bg-indigo-100 transition-colors"
+                            >
+                                <span className="text-indigo-600 font-bold text-sm">
+                                    {(user.FullName || user.email || 'U')[0].toUpperCase()}
+                                </span>
+                            </div>
+
+      { isOpen && <UserDropdown 
+          isOpen={isOpen} 
+          onClose={() => setIsOpen(false)}
+          workplaceRoute="/board/:boardId"
+          boardsRoute="/dashboard"
+      />}
+
+                        </div>
+                    )}
+                </div>
             </nav>
 
             <div className="max-w-7xl mx-auto px-8 py-12">

@@ -1,9 +1,13 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { BoardCard } from "../features/auth/card/types";
-import { Clock } from "lucide-react";
+import { Archive, Clock } from "lucide-react";
 import { formatDueDate } from "../utils/FormateDate";
 import CardMemberAvatars from "../features/auth/card/CardMemberAvatars";
 import { LabelColor } from "../features/auth/card/label.types";
+import { archiveCardThunk } from "../features/auth/card/cardThunks";
+import { useAppDispatch } from "../app/hooks";
+import { addActivity } from "../features/activity/activitySlice";
+import { clearSelectedCard } from "../features/auth/card/cardSlice";
 const LABEL_COLORS: Record<LabelColor, string> = {
     red: "bg-red-500",
     orange: "bg-orange-500",
@@ -33,8 +37,21 @@ export default function TaskCard({ card, onClick }: Props) {
             listId: card.listId,
         },
     });
+      const dispatch = useAppDispatch();
+
     const checklistStats = card.checklistSummary ?? null;
     console.log("checklistStats", checklistStats)
+const handleArchive = () => {
+  dispatch(archiveCardThunk(card.id));
+  dispatch(
+    addActivity({
+      id: Date.now().toString(),
+      message: `Card "${card.title}" archived`,
+      timestamp: Date.now(),
+    })
+  );
+  dispatch(clearSelectedCard());
+};
 
     return (
         <div
@@ -46,7 +63,7 @@ export default function TaskCard({ card, onClick }: Props) {
                     : undefined,
                 transition,
             }}
-            onClick={() => onClick(card.id)}   // ✅ CLICK WORKS
+            onClick={() => onClick(card.id)} // ✅ CLICK WORKS
             className="bg-white p-3 rounded-lg shadow cursor-pointer"
         >
             {/* 🔹 Drag handle ONLY */}
@@ -56,40 +73,29 @@ export default function TaskCard({ card, onClick }: Props) {
             >
                 ⠿ Drag
             </div>
+            <div className="flex flex-row justify-between ">
+                <div className="font-medium">{card.title}</div>
+                <button onClick={(e) => {
+                        e.stopPropagation();   // 🔥 THIS LINE FIXES EVERYTHING
 
-            <div className="font-medium">{card.title}</div>
-            {/* 
-            {card.checklistSummary && (
-                <div className="flex items-center gap-1 mt-2 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded w-fit">
-                    {card.checklistSummary.completed}/{card.checklistSummary.total}
-                </div>
-            )} */}
-
-
-
-            {/* <div className="flex gap-1 flex-wrap mt-1">
-                {card.isCompleted && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-                        Completed
-                    </span>
-                )}
-
-            </div> */}
-
+                    handleArchive();
+                    
+                }}>
+                    <Archive  className="text-gray-400 hover:text-gray-600 size-4" />
+                </button>
+            </div>
 
             <div className="flex gap-1 flex-wrap mt-1">
                 {card.labels.map(label => (
                     <span
                         key={label.name}
-                        className={`px-2 py-0.5 text-xs rounded text-white ${LABEL_COLORS[label.color]
-                            }`}
+                        className={`px-2 py-0.5 text-xs rounded text-white ${LABEL_COLORS[label.color]}`}
                     >
                         {label.name}
                     </span>
-
-
                 ))}
             </div>
+
             {card.dueDate && (
                 <div className="flex items-center gap-1.5 mt-3">
                     <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-[11px] font-bold tracking-wide transition-colors ${card.isCompleted
@@ -106,20 +112,10 @@ export default function TaskCard({ card, onClick }: Props) {
                 </div>
             )}
 
-            {/* {card.members && card.members.length > 0 && (
-               <div className="ml-52 mt-0"> 
-
-                <CardMemberAvatars members={card.members}  />
-             </div>
-            )} */}
-
-
             {/* Status row (checklist + completed + members) */}
             <div className="flex items-center justify-between mt-2">
-
                 {/* LEFT SIDE */}
                 <div className="flex items-center gap-2 text-xs">
-
                     {card.checklistSummary && (
                         <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded">
                             {card.checklistSummary.completed}/{card.checklistSummary.total}
@@ -131,7 +127,6 @@ export default function TaskCard({ card, onClick }: Props) {
                             Completed
                         </span>
                     )}
-
                 </div>
 
                 {/* RIGHT SIDE */}
@@ -139,9 +134,6 @@ export default function TaskCard({ card, onClick }: Props) {
                     <CardMemberAvatars members={card.members} />
                 )}
             </div>
-
         </div>
-
-
     );
 }

@@ -2,8 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { BoardCard, SaveCardOrderPayload } from "./types";
 
 import {
+    archiveCardAPI,
     createCardApi,
     moveCardApi,
+    restoreCardAPI,
     saveCardOrderApi,
     updateCardApi,
 } from "../../../services/cardService";
@@ -86,9 +88,8 @@ export const updateCard = createAsyncThunk(
     ) => {
         try {
             const res = await updateCardApi(payload.id, payload.data);
-            console.log("res", res)
-            console.log("res", res.data.dueDate)
-            return res.data;
+            return res.data;    
+
         } catch {
             return rejectWithValue("Failed to update card");
         }
@@ -110,4 +111,21 @@ export const toggleCardComplete = createAsyncThunk(
         const res = await api.patch(`/cards/${cardId}/toggle-complete`);
         return res.data;
     }
+);
+
+
+export const archiveCardThunk = createAsyncThunk(
+  "cards/archive",
+  async (cardId: number) => {
+    await archiveCardAPI(cardId);
+    return cardId;
+  }
+);
+
+export const restoreCardThunk = createAsyncThunk(
+  "cards/restore",
+  async (cardId: number) => {
+    await restoreCardAPI(cardId);
+    return cardId;
+  }
 );

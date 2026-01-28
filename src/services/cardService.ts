@@ -29,4 +29,17 @@ export const moveCardApi = (data: {
 
 
 export const updateCardApi = (id: number, payload: Partial<BoardCard>) =>
+{    
     api.patch(`/cards/${id}`, payload);
+}
+
+export const archiveCardAPI = (cardId: number) =>{
+  api.patch(`/cards/${cardId}/archive`);
+
+}
+
+export const restoreCardAPI = (cardId: number) =>
+{  api.patch(`/cards/${cardId}/restore`);}
+
+export const getArchivedCardsAPI = (boardId: number) =>
+  {api.get(`/cards/archived/${boardId}`);}

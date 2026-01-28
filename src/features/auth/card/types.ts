@@ -21,7 +21,7 @@ export interface Checklist {
 
 /* ---------- Card shown on board ---------- */
 export interface BoardCard {
-  
+  isArchived: boolean; 
   id: number;
   title: string;
   description: string | null;

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createCard, fetchCardById, fetchCardsByList, moveCardThunk, toggleCardComplete, updateCard } from "./cardThunks";
+import { archiveCardThunk, createCard, fetchCardById, fetchCardsByList, moveCardThunk, restoreCardThunk, toggleCardComplete, updateCard } from "./cardThunks";
 import { arrayMove } from "@dnd-kit/sortable";
 import { BoardCard, Checklist, ChecklistItem, FullCard } from "./types";
 import { addChecklistItem, createChecklist, deleteChecklist, toggleChecklistItem } from "../../checklists/checklistThunk";
@@ -90,7 +90,7 @@ const cardSlice = createSlice({
         },
         clearSelectedCard(state) {
             state.selectedCard = null;
-        },
+            },
 
 
         // updateCard: (state, action) => {
@@ -124,6 +124,7 @@ const cardSlice = createSlice({
                             reminderSent: card.reminderSent,
                             selectedCard: card.selectedCard,
                             members: card.members ?? [],
+                            isArchived: card.isArchived ?? false,
 
                             // ✅ CORRECT
                             checklistSummary: card.checklistSummary ?? null,
@@ -148,7 +149,9 @@ const cardSlice = createSlice({
                     reminderSent: card.reminderSent || false,
                     selectedCard: null,
                     checklistSummary: null,
-                    members: []
+                    members: [],
+                    isArchived: false,
+
                 });
             })
 
@@ -329,11 +332,20 @@ const cardSlice = createSlice({
                     state.selectedCard.checklists.filter(
                         (c) => c.id !== checklistId
                     );
-            });
+            })
 
 
+.addCase(archiveCardThunk.fulfilled, (state, action) => {
+  const card = state.cards.find(c => c.id === action.payload);
+  if (card) card.isArchived = true;
+})
 
-    },
+.addCase(restoreCardThunk.fulfilled, (state, action) => {
+  const card = state.cards.find(c => c.id === action.payload);
+  if (card) card.isArchived = false;
+}
+
+ ) },
 
 
 });

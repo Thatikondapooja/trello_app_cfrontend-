@@ -268,13 +268,18 @@ import { createList, fetchLists } from "../list/listThunks";
 import { createCard, fetchCardById, fetchCardsByList, moveCardThunk } from "../card/cardThunks";
 import { clearSelectedCard, reorderCards } from "../card/cardSlice";
 import CardDetailsModal from "../card/CardDetailsModel";
-import { ChevronLeft } from "lucide-react";
+import { ArchiveRestore, ChevronLeft, Settings } from "lucide-react";
+import UserDropdown from "./userDropDown";
+import ArchivedCardsPanel from "../card/ArchivedCardsPanel";
 export default function BoardView() {
     const dispatch = useAppDispatch();
     const [listTitle, setListTitle] = useState("");
     const [cardTitles, setCardTitles] = useState<Record<string, string>>({});
     const [isAddingList, setIsAddingList] = useState(false);
     const [activeCard, setActiveCard] = useState<{ id: number; title: string } | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+const [showArchived, setShowArchived] = useState(false);
+
     const boards = useAppSelector(state => state.board.boards);
     console.log("boars in dashboard", boards)
 
@@ -458,11 +463,36 @@ export default function BoardView() {
 
                 <div className="flex items-center gap-4">
                     <ActivityDetailes />
+{/* <Settings /> */}
+                    <button
+  onClick={() => setShowArchived(true)}
+  
+  className="flex items-center gap-1 px-3 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition"
+>
+     <ArchiveRestore className="mr-1" />
+ Archived cards
+</button>
+{showArchived && (
+  <ArchivedCardsPanel onClose={() => setShowArchived(false)} />
+)}
+
+
                     {user && (
-                        <div className="w-9 h-9 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shadow-sm">
-                            <span className="text-indigo-600 font-bold text-sm">
-                                {(user.FullName || user.email || 'U')[0].toUpperCase()}
-                            </span>
+                        <div className="relative">
+                            <div 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsOpen(true);
+                                }}
+                                className="w-9 h-9 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shadow-sm cursor-pointer hover:bg-indigo-100 transition-colors"
+                            >
+                                <span className="text-indigo-600 font-bold text-sm">
+                                    {(user.FullName || user.email || 'U')[0].toUpperCase()}
+                                </span>
+                            </div>
+
+      { isOpen && <UserDropdown isOpen={isOpen} onClose={() => setIsOpen(false)} />}
+
                         </div>
                     )}
                 </div>
@@ -476,7 +506,7 @@ export default function BoardView() {
                             key={list.id}
                             listId={(list.id)}
                             title={list.title}
-                            cards={cards.filter((card) => card.listId === list.id)}
+                            cards={cards.filter((card) => card.listId === list.id && !card.isArchived)}
                             cardTitles={cardTitles}
                             setCardTitles={setCardTitles}
                             onAddCard={handleAddCard}
