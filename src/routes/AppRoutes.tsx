@@ -15,20 +15,22 @@ import { ToastContainer } from "react-toastify";
 
 const AppRoutes = () => {
     {/* ✅ Toast Container */ }
-    <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored" />
 
     return (
         <BrowserRouter>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored" />
+            <ToastContainer />
+
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/Signup" element={<Signup />} />
