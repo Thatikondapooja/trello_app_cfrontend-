@@ -14,10 +14,10 @@ import { ToastContainer } from "react-toastify";
 
 
 const AppRoutes = () => {
-    {/* ✅ Toast Container */ }
 
     return (
         <BrowserRouter>
+            {/* ✅ Toast Container */ }
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
