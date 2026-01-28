@@ -88,7 +88,7 @@ export const updateCard = createAsyncThunk(
     ) => {
         try {
             const res = await updateCardApi(payload.id, payload.data);
-            return res.data;
+            return res;
 
         } catch {
             return rejectWithValue("Failed to update card");

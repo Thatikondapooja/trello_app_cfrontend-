@@ -27,13 +27,13 @@ export const saveCardOrderApi = (data: {
     return api.patch("/cards/reorder", data);
 };
 
-
 export const updateCardApi = (
-    id: number,
-    payload: Partial<BoardCard>
+  id: number,
+  payload: Partial<BoardCard>
 ) => {
-    return api.patch(`/cards/${id}`, payload).then(res => res.data);
+  return api.patch(`/cards/${id}`, payload).then(res => res.data);
 };
+
 
 
 export const archiveCardAPI = (cardId: number) =>
