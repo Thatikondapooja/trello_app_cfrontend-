@@ -4,6 +4,9 @@ import Button from "../components/comman/Button";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
 import { registerUser } from "../features/auth/authAPI";
+import { toast } from "react-toastify";
+import { useAppSelector } from "../app/hooks";
+
 
 export default function Signup() {
     const navigate = useNavigate();
@@ -19,6 +22,7 @@ export default function Signup() {
     const [emailerror, setemailErrors] = useState("")
     const [passworderror, setpasswordErrors] = useState("")
     const [confirmPassworderror, setConfirmPasswordErrors] = useState("")
+    const { error, loading } = useAppSelector((state) => state.auth);
 
 
 
@@ -95,7 +99,7 @@ export default function Signup() {
             setConfirmPasswordErrors("Passwords do not match");
             return false;
         }
-       return true
+        return true
     }
 
     /* ---------------- SUBMIT ---------------- */
@@ -118,6 +122,7 @@ export default function Signup() {
             .unwrap()
             .then(() => navigate("/"))
             .catch(() => { });
+        toast.success("Registered Successfully")
     };
 
     return (
@@ -202,11 +207,30 @@ export default function Signup() {
 
                             </div>
 
+                            {/* Error Message */}
+                            {error && (
+                                <div className="p-3 bg-red-50 border border-red-100 rounded-xl">
+                                    <p className="text-xs text-red-600 text-center font-medium">
+                                        {error}
+                                    </p>
+                                </div>
+                            )}
+
                             <Button
                                 type="submit"
-                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl"
-                        >Get Started for Free</Button>
-                           
+                                disabled={loading}
+                                className={`w-full bg-indigo-500 text-xl text-white hover:bg-indigo-700 py-2 rounded-xl transition-all ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                            >
+                                {loading ? (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                        <span>Signing up...</span>
+                                    </div>
+                                ) : (
+                                    'Get Started for Free'
+                                )}
+                            </Button>
+
                         </form>
 
                     </div>

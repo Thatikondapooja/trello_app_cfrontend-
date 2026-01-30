@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createList, fetchLists } from "./listThunks";
 import { ListsState } from "./types";
+import { arrayMove } from "@dnd-kit/sortable";
 
 const initialState: ListsState = {
     lists: [],
@@ -14,6 +15,14 @@ const listSlice = createSlice({
     reducers: {
         clearLists(state) {
             state.lists = [];
+        },
+        reorderLists(state, action: PayloadAction<{ activeId: number; overId: number }>) {
+            const { activeId, overId } = action.payload;
+            const oldIndex = state.lists.findIndex((l) => l.id === activeId);
+            const newIndex = state.lists.findIndex((l) => l.id === overId);
+            if (oldIndex !== -1 && newIndex !== -1) {
+                state.lists = arrayMove(state.lists, oldIndex, newIndex);
+            }
         },
     },
     extraReducers: (builder) => {
@@ -48,5 +57,5 @@ const listSlice = createSlice({
     },
 });
 
-export const { clearLists } = listSlice.actions;
+export const { clearLists, reorderLists } = listSlice.actions;
 export default listSlice.reducer;

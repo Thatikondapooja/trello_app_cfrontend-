@@ -11,6 +11,7 @@ export default function SendOtp() {
     const [otp, setOtp] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
+
     // Safely extract email from location state
     const email = (location.state as { email: string })?.email || 'your email';
     console.log("email from sendotp page ", email)
