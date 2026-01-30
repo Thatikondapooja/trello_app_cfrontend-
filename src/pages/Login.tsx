@@ -1,7 +1,7 @@
 import { useState } from "react"; // Verified clean import for Vercel deployment
 import InputComponent from "../components/comman/inputComponent";
 import Button from "../components/comman/Button";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authAPI";
 // import { loginSuccess } from "../features/auth/authSlice";
@@ -15,6 +15,7 @@ export default function Login() {
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const { error, loading } = useAppSelector((state) => state.auth);
 
 
     /* ---------------- VALIDATIONS ---------------- */
@@ -138,13 +139,33 @@ export default function Login() {
 
                     </div>
 
+                    {/* Error Message */}
+                    {error && (
+                        <div className="p-3 bg-red-50 border border-red-100 rounded-xl">
+                            <p className="text-xs text-red-600 text-center font-medium">
+                                {error}
+                            </p>
+                        </div>
+                    )}
+
                     {/* Button */}
                     <Button
                         type="submit"
-                        className="w-full bg-indigo-500 text-xl text-white hover:bg-indigo-700   py-2 rounded-xl" >continue</Button>
+                        disabled={loading}
+                        className={`w-full bg-indigo-500 text-xl text-white hover:bg-indigo-700 py-2 rounded-xl transition-all ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                    >
+                        {loading ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                <span>Signing in...</span>
+                            </div>
+                        ) : (
+                            'Continue'
+                        )}
+                    </Button>
 
 
-                   
+
                 </form>
 
                 {/* Footer */}
@@ -152,12 +173,12 @@ export default function Login() {
                     {/* <button className="text-sm text-indigo-600 hover:underline">
                         Forgot password?
                     </button> */}
-                            <a
-                                href="/forgot-password"
-                               className="text-sm text-indigo-600 hover:underline"
-                            >
-                                Forgot password?
-                            </a>
+                    <a
+                        href="/forgot-password"
+                        className="text-sm text-indigo-600 hover:underline"
+                    >
+                        Forgot password?
+                    </a>
                     <p className="text-sm text-slate-500 mt-4">
                         Don’t have an account?{" "}
                         <button
