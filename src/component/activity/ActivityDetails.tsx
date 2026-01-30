@@ -9,14 +9,14 @@ export default function ActivityDetails() {
             {/* Activity Button */}
             <button
                 onClick={() => setIsVisible(true)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 transition-all duration-200 backdrop-blur-sm border border-white/30"
+                className="flex items-center gap-1 md:gap-2 p-2 md:px-4 md:py-2.5 rounded-xl bg-slate-100/50 hover:bg-slate-200 transition-all duration-200 border border-slate-200"
             >
-                <span className="w-8 h-8 rounded-full bg-gradient-to-l from-indigo-500 to-blue-400  to bg-gray-200 flex items-center justify-center text-white ">
+                <span className="w-8 h-8 rounded-full bg-gradient-to-l from-indigo-500 to-blue-400 flex items-center justify-center text-white shrink-0 shadow-sm">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </span>
-                <span className="text-gray-900 text-base font-medium">Activity</span>
+                <span className="hidden md:inline text-slate-700 text-sm font-medium">Activity</span>
             </button>
 
             {isVisible && (

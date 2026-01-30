@@ -149,7 +149,7 @@ const Dashboard = () => { // Deployment verified: dispatch included in useEffect
     const navigate = useNavigate();
     const boards = useAppSelector(state => state.board.boards);
     const user = useAppSelector(state => state.auth.user);
-const[isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     console.log("boars in dashboard", boards)
     useEffect(() => {
@@ -169,42 +169,42 @@ const[isOpen, setIsOpen] = useState(false);
     return (
         <div className="min-h-screen bg-slate-50">
             {/* Top Navigation Bar */}
-            <nav className="bg-white border-b border-slate-200 px-8 py-4 flex justify-between items-center sticky top-0 z-30">
+            <nav className="bg-white border-b border-slate-200 px-4 md:px-8 py-3 md:py-4 flex justify-between items-center sticky top-0 z-30">
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                         <span className="text-white font-bold text-xs">T</span>
                     </div>
-                    <span className="text-lg font-bold  font-lato text-slate-900 tracking-tight">Trello Clone</span>
+                    <span className="text-sm md:text-lg font-bold  font-lato text-slate-900 tracking-tight">Trello Clone</span>
                 </div>
-               <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4">
                     <ActivityDetails />
                     {user && (
                         <div className="relative">
-                            <div 
+                            <div
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsOpen(!isOpen);
                                 }}
-                                className="w-9 h-9 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shadow-sm cursor-pointer hover:bg-indigo-100 transition-colors"
+                                className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shadow-sm cursor-pointer hover:bg-indigo-100 transition-colors"
                             >
-                                <span className="text-indigo-600 font-bold text-sm">
+                                <span className="text-indigo-600 font-bold text-xs md:text-sm">
                                     {(user.FullName || user.email || 'U')[0].toUpperCase()}
                                 </span>
                             </div>
 
-      { isOpen && <UserDropdown 
-          isOpen={isOpen} 
-          onClose={() => setIsOpen(false)}
-          workplaceRoute="/board/:boardId"
-          boardsRoute="/dashboard"
-      />}
+                            {isOpen && <UserDropdown
+                                isOpen={isOpen}
+                                onClose={() => setIsOpen(false)}
+                                workplaceRoute="/board/:boardId"
+                                boardsRoute="/dashboard"
+                            />}
 
                         </div>
                     )}
                 </div>
             </nav>
 
-            <div className="max-w-7xl mx-auto px-8 py-12">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
                 <div className="flex items-center justify-between mb-10">
                     <div>
                         <h1 className="text-3xl font-bold text-slate-900">Workspace Boards</h1>

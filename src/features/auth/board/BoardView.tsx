@@ -278,7 +278,7 @@ export default function BoardView() {
     const [isAddingList, setIsAddingList] = useState(false);
     const [activeCard, setActiveCard] = useState<{ id: number; title: string } | null>(null);
     const [isOpen, setIsOpen] = useState(false);
-const [showArchived, setShowArchived] = useState(false);
+    const [showArchived, setShowArchived] = useState(false);
 
     const boards = useAppSelector(state => state.board.boards);
     console.log("boars in dashboard", boards)
@@ -438,68 +438,67 @@ const [showArchived, setShowArchived] = useState(false);
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col h-screen overflow-hidden">
             {/* Header */}
-            <header className="bg-white border-b border-slate-200 px-8 py-3 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-3 ml-11">
-                        {/* <div onClick={handleGoBack} className="cursor-pointer animate-bounce"><ChevronLeft /></div> */}
-                        <div
-                            onClick={handleGoBack}
-                            className=" fixed left-4 top-6 -translate-y-1/2 cursor-pointer p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition animate-bounce">
-                            <ChevronLeft size={24} />
-                        </div>
+            <header className="bg-white border-b border-slate-200 px-4 md:px-8 py-3 flex items-center justify-between shrink-0 sticky top-0 z-50">
+                <div className="flex items-center gap-2 md:gap-6">
+                    <button
+                        onClick={handleGoBack}
+                        className="flex items-center justify-center p-2 rounded-full bg-white shadow-sm border border-slate-200 hover:bg-slate-50 transition shrink-0">
+                        <ChevronLeft size={20} className="md:w-6 md:h-6" />
+                    </button>
 
-                        <div className="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100 ">
-                            <svg className="w-5 h-5 text-indigo-600 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="flex items-center gap-2 md:gap-3">
+                        <div className="hidden sm:flex w-10 h-10 bg-indigo-50 rounded-lg items-center justify-center border border-indigo-100 shrink-0">
+                            <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 0v10" />
                             </svg>
                         </div>
 
-                        <div>
-                            <h1 className="md:text-xl text-xs  font-bold text-slate-900 leading-none">Project Workspace</h1>
-                            <p className="md:text-xs text-slate-500 mt-1 uppercase tracking-widest font-semibold">{lists.length} Columns</p>
+                        <div className="min-w-0">
+                            <h1 className="text-sm md:text-xl font-bold text-slate-900 leading-none truncate">Project Workspace</h1>
+                            <p className="text-[10px] md:text-xs text-slate-500 mt-1 uppercase tracking-widest font-semibold truncate">{lists.length} Columns</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4">
                     <ActivityDetailes />
-{/* <Settings /> */}
+
                     <button
-  onClick={() => setShowArchived(true)}
-  
-  className="flex items-center gap-1 px-3 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition"
->
-     <ArchiveRestore className="mr-1" />
- Archived cards
-</button>
-{showArchived && (
-  <ArchivedCardsPanel onClose={() => setShowArchived(false)} />
-)}
+                        onClick={() => setShowArchived(true)}
+                        className="flex items-center justify-center p-2 md:px-3 md:py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition shrink-0"
+                        title="Archived Cards"
+                    >
+                        <ArchiveRestore size={18} className="md:mr-1" />
+                        <span className="hidden md:inline text-sm">Archived cards</span>
+                    </button>
+
+                    {showArchived && (
+                        <ArchivedCardsPanel onClose={() => setShowArchived(false)} />
+                    )}
 
 
                     {user && (
-                        <div className="relative">
-                            <div 
+                        <div className="relative shrink-0">
+                            <div
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsOpen(true);
                                 }}
-                                className="w-9 h-9 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shadow-sm cursor-pointer hover:bg-indigo-100 transition-colors"
+                                className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shadow-sm cursor-pointer hover:bg-indigo-100 transition-colors"
                             >
-                                <span className="text-indigo-600 font-bold text-sm">
+                                <span className="text-indigo-600 font-bold text-xs md:text-sm">
                                     {(user.FullName || user.email || 'U')[0].toUpperCase()}
                                 </span>
                             </div>
 
-      { isOpen && <UserDropdown isOpen={isOpen} onClose={() => setIsOpen(false)} />}
-
+                            {isOpen && <UserDropdown isOpen={isOpen} onClose={() => setIsOpen(false)} />}
                         </div>
                     )}
                 </div>
             </header>
 
             {/* Main Board View */}
-            <main className=" p-8 flex flex-col md:flex-row md:gap-3 overflow-x-auto  gap-6 items-start custom-scrollbar">
+            <main className="p-4 md:p-8 flex flex-col md:flex-row md:gap-3 overflow-x-auto gap-6 items-start custom-scrollbar">
                 <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                     {lists.map((list) => (
                         <ListColumn
