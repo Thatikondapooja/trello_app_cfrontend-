@@ -122,7 +122,6 @@ export default function Signup() {
             .unwrap()
             .then(() => navigate("/"))
             .catch(() => { });
-        toast.success("Registered Successfully")
     };
 
     return (
