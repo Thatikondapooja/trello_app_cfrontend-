@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { addActivity } from "../../activity/activitySlice";
 import InputComponent from "../../../components/comman/inputComponent";
 import Button from "../../../components/comman/Button";
+import Tooltip from "../../../components/comman/Tooltip";
 import ListColumn from "../../../component/kanban/ListCloumns";
 import ActivityDetailes from "../../../component/activity/ActivityDetails";
 import { createList, fetchLists } from "../list/listThunks";
@@ -187,11 +188,13 @@ export default function BoardView() {
         <div className="min-h-screen bg-slate-50 flex flex-col h-screen overflow-hidden">
             <header className="bg-white border-b border-slate-200 px-4 md:px-8 py-3 flex items-center justify-between shrink-0 sticky top-0 z-50">
                 <div className="flex items-center gap-2 md:gap-6">
-                    <button
-                        onClick={handleGoBack}
-                        className="flex items-center justify-center p-2 rounded-full bg-white shadow-sm border border-slate-200 hover:bg-slate-50 transition shrink-0">
-                        <ChevronLeft size={20} className="md:w-6 md:h-6" />
-                    </button>
+                    <Tooltip content="Go back">
+                        <button
+                            onClick={handleGoBack}
+                            className="flex items-center justify-center p-2 rounded-full bg-white shadow-sm border border-slate-200 hover:bg-slate-50 transition shrink-0">
+                            <ChevronLeft size={20} className="md:w-6 md:h-6" />
+                        </button>
+                    </Tooltip>
                     <div className="flex items-center gap-2 md:gap-3">
                         <div className="hidden sm:flex w-10 h-10 bg-indigo-50 rounded-lg items-center justify-center border border-indigo-100 shrink-0">
                             <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

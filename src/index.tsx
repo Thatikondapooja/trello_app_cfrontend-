@@ -5,6 +5,8 @@ import { store } from "./app/store";
 import App from "./App";
 import "./index.css";
 
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -12,7 +14,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>
     </Provider>
   </React.StrictMode>
 );

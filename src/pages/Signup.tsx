@@ -1,6 +1,7 @@
 import { useState } from "react"; // Verified clean import for Vercel deployment
 import InputComponent from "../components/comman/inputComponent";
 import Button from "../components/comman/Button";
+import Tooltip from "../components/comman/Tooltip";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
 import { registerUser } from "../features/auth/authAPI";
@@ -247,9 +248,13 @@ export default function Signup() {
 
                     <p className="text-[10px] text-center text-slate-400 mt-6 px-4">
                         By clicking "Get Started", you agree to our
-                        <span className="underline cursor-pointer mx-1">Terms of Service</span>
+                        <Tooltip content="Read our Terms of Service">
+                            <span className="underline cursor-pointer mx-1">Terms of Service</span>
+                        </Tooltip>
                         and
-                        <span className="underline cursor-pointer ml-1">Privacy Policy</span>.
+                        <Tooltip content="Learn how we protect your data">
+                            <span className="underline cursor-pointer ml-1">Privacy Policy</span>
+                        </Tooltip>.
                     </p>
                 </div>
             </div>
