@@ -29,8 +29,6 @@ const AppRoutes = () => {
                 draggable
                 pauseOnHover
                 theme="colored" />
-            <ToastContainer />
-
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/Signup" element={<Signup />} />
