@@ -5,7 +5,6 @@ import Tooltip from "../components/comman/Tooltip";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
 import { registerUser } from "../features/auth/authAPI";
-import { toast } from "react-toastify";
 import { useAppSelector } from "../app/hooks";
 
 
@@ -215,6 +214,7 @@ export default function Signup() {
                                     </p>
                                 </div>
                             )}
+                            {/* button */}
 
                             <Button
                                 type="submit"
