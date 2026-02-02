@@ -11,6 +11,7 @@ import ResetPassword from "../page/ResetPassword";
 import VerifyForgotOtp from "../page/VerifyForgotPwd";
 import SendOtp from "../page/SendOtp";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const AppRoutes = () => {
