@@ -11,9 +11,9 @@ interface UserDropdownProps {
     boardsRoute?: string; // Optional prop for custom boards route
 }
 
-const UserDropdown: React.FC<UserDropdownProps> = ({ 
-    isOpen, 
-    onClose, 
+const UserDropdown: React.FC<UserDropdownProps> = ({
+    isOpen,
+    onClose,
 
 }) => {
     const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
     if (!isOpen) return null;
 
     return (
-        <div 
+        <div
             ref={dropdownRef}
             className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-slate-200 py-2 z-50"
             style={{ top: '100%', right: '0', marginTop: '8px' }}
@@ -90,7 +90,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
                 >
                     Project Workplace
                 </button> */}
-                
+
                 {/* <button
                     onClick={() => {
                         navigate('/profile');
@@ -100,13 +100,13 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
                 >
                     Profile Settings
                 </button> */}
-                 
+
                 <button
                     onClick={() => {
                         navigate('/dashboard');
                         onClose();
                     }}
-                    className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                    className="w-full text-left ml-8 py-2  text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
                 >
                     My Boards
                 </button>

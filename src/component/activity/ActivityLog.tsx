@@ -9,7 +9,7 @@ export default function ActivityLog() {
         <div className="space-y-3">
             {/* Empty state */}
             {activities.length === 0 && (
-                <p className="text-sm text-blue-500 text-center mt-6">
+                <p className="text-sm text-white text-center mt-6">
                     No activity yet
                 </p>
             )}

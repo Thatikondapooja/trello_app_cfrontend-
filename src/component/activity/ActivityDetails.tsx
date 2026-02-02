@@ -9,9 +9,9 @@ export default function ActivityDetails() {
             {/* Activity Button */}
             <button
                 onClick={() => setIsVisible(true)}
-                className="flex items-center gap-1 md:gap-2 p-2 md:px-4 md:py-2.5 rounded-xl bg-slate-100/50 hover:bg-slate-200 transition-all duration-200 border border-slate-200"
+                className="flex items-center gap-1 md:gap-2 p-2 md:px-4 md:py-2 rounded-xl bg-slate-100/50 hover:bg-slate-200 transition-all duration-200 border border-slate-200"
             >
-                <span className="w-8 h-8 rounded-full bg-gradient-to-l from-indigo-500 to-blue-400 flex items-center justify-center text-white shrink-0 shadow-sm">
+                <span className="w-5 h-5 rounded-full bg-gradient-to-l from-indigo-500 to-blue-400 flex items-center justify-center text-white shrink-0 shadow-sm">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -30,9 +30,9 @@ export default function ActivityDetails() {
                     {/* Activity Drawer */}
                     <div className="fixed top-0 right-0 h-screen w-[420px] bg-gradient-to-l from-indigo-300 to-blue-300  shadow-2xl flex flex-col z-[60] animate-slide-in">
                         {/* Header */}
-                        <div className="px-6 py-6 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-purple-50 to-pink-50">
+                        <div className="px-4 py-2 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-purple-50 to-pink-50">
                             <h2 className="text-xl font-bold text-indigo-800 flex items-center gap-3">
-                                <span className="w-11 h-11 rounded-full bg-gradient-to-l from-indigo-500 to-blue-400  to-pink-500 flex items-center justify-center text-white shadow-lg">
+                                <span className="w-8 h-8 rounded-full bg-gradient-to-l from-indigo-500 to-blue-200  to-indigo-300 flex items-center justify-center text-white shadow-lg">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
