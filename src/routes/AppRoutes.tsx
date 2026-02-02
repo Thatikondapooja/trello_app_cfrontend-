@@ -17,7 +17,7 @@ const AppRoutes = () => {
 
     return (
         <BrowserRouter>
-            {/* ✅ Toast Container */ }
+            {/* ✅ Toast Container */}
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
