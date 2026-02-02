@@ -14,7 +14,7 @@ export const fetchCardsByListApi = (listId: number) => {
 
 export const moveCardApi = (data: {
     cardId: number;
-    toListId: string;
+    toListId: number;
 }) => {
     return api.patch(`/cards/${data.cardId}/move`, {
         toListId: data.toListId,
@@ -28,10 +28,10 @@ export const saveCardOrderApi = (data: {
 };
 
 export const updateCardApi = (
-  id: number,
-  payload: Partial<BoardCard>
+    id: number,
+    payload: Partial<BoardCard>
 ) => {
-  return api.patch(`/cards/${id}`, payload).then(res => res.data);
+    return api.patch(`/cards/${id}`, payload).then(res => res.data);
 };
 
 

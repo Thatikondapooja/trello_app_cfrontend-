@@ -28,9 +28,13 @@ export const createCard = createAsyncThunk(
 );
 
 // cardThunks.ts
-export const fetchCardsByList = createAsyncThunk(
+export const fetchCardsByList = createAsyncThunk<
+    { listId: number; cards: BoardCard[] },
+    number,
+    { rejectValue: string }
+>(
     "card/fetchByList",
-    async (listId: number, { rejectWithValue }) => {
+    async (listId, { rejectWithValue }) => {
         try {
             const res = await api.get(`/cards/list/${listId}`);
             return { listId, cards: res.data };
@@ -41,10 +45,14 @@ export const fetchCardsByList = createAsyncThunk(
 );
 
 
-export const moveCardThunk = createAsyncThunk(
+export const moveCardThunk = createAsyncThunk<
+    any,
+    { cardId: number; toListId: number },
+    { rejectValue: string }
+>(
     "card/move",
     async (
-        payload: { cardId: number; toListId: string },
+        payload: { cardId: number; toListId: number },
         { rejectWithValue }
     ) => {
         try {
