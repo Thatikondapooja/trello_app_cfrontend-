@@ -208,15 +208,17 @@ export default function BoardView() {
                     </div>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4">
-                    <ActivityDetails />
-                    <button
-                        onClick={() => setShowArchived(true)}
-                        className="flex items-center justify-center p-2 md:px-3 md:py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition shrink-0"
-                        title="Archived Cards"
-                    >
-                        <ArchiveRestore size={18} className="md:mr-1" />
-                        <span className="hidden md:inline text-sm">Archived cards</span>
-                    </button>
+                    <Tooltip content="Activity Details"><ActivityDetails /></Tooltip>
+                    <Tooltip content="Archived Cards">
+                        <button
+                            onClick={() => setShowArchived(true)}
+                            className="flex items-center justify-center p-2 md:px-3 md:py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition shrink-0"
+                            title="Archived Cards"
+                        >
+                            <ArchiveRestore size={18} className="md:mr-1" />
+                            <span className="hidden md:inline text-sm">Archived cards</span>
+                        </button>
+                    </Tooltip>
                     {showArchived && (
                         <ArchivedCardsPanel onClose={() => setShowArchived(false)} />
                     )}
