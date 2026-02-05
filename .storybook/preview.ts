@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/react-webpack5';
+import { Preview } from '@storybook/react';
 import '../src/index.css';
 
 
