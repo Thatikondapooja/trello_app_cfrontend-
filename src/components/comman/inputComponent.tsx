@@ -10,9 +10,10 @@ interface InputProps {
     inputmode?:string;
 }
 
-export default function InputComponent({ value, onChange, placeholder, type = "text", className = "", name="text" }: InputProps) {
+export default function InputComponent({ value, onChange, placeholder, type = "text", className = "", name="text",inputId }: InputProps) {
     return (
         <input
+            id={inputId}
             value={value}
             onChange={onChange}
             placeholder={placeholder}

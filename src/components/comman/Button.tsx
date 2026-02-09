@@ -5,6 +5,7 @@ interface ButtonProps {
     className?: string;
     type?: "button" | "submit" | "reset";
     disabled?: boolean;
+    name?:string;
 }
 
 export default function Button({
@@ -14,6 +15,7 @@ export default function Button({
     variant = "primary",
     className = "",
     disabled = false,
+    name,
 }: ButtonProps) {
     const base =
         "px-5 py-1.5 rounded-md text-sm font-medium transition";
@@ -25,6 +27,7 @@ export default function Button({
 
     return (
         <button
+        name={name}
             type={type}
             onClick={onClick}
             disabled={disabled}
