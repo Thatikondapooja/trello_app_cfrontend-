@@ -5,6 +5,7 @@ node_modules/
 dist/
 build/
 
+
 # environment files
 .env
 .env.local
@@ -24,3 +25,5 @@ Thumbs.db
 
 *storybook.log
 storybook-static
+coverage/
+
