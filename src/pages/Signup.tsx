@@ -142,7 +142,7 @@ export default function Signup() {
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Full Name</label>
+                        <label htmlFor="FullName" className="sr-only">Full Name</label>
                         <form className="space-y-4" onSubmit={handleSignup}>
                             {/* Name */}
                             <div>
@@ -150,6 +150,7 @@ export default function Signup() {
                                     <p className="text-xs text-red-500 mt-1 ml-2">{nameerror}</p>
                                 )}
                                 <InputComponent
+                                inputId="FullName"
                                     name="FullName"
                                     type="text"
                                     placeholder="Full name"
@@ -161,11 +162,13 @@ export default function Signup() {
 
                             {/* Email */}
                             <div>
+                                <label htmlFor="email" className="sr-only">Email</label>
                                 {emailerror && (
                                     <p className="text-xs text-red-500 mt-1 ml-2">{emailerror}</p>
                                 )}
                                 <InputComponent
                                     name="email"
+                                    inputId="email"
                                     type="email"
                                     placeholder="Email address"
                                     value={email}
@@ -176,11 +179,14 @@ export default function Signup() {
 
                             {/* Password */}
                             <div>
+
+                             <label htmlFor="password" className="sr-only">Password</label>
                                 {passworderror && (
                                     <p className="text-xs text-red-500 mt-1 ml-2">{passworderror}</p>
                                 )}
                                 <InputComponent
                                     name="password"
+                                    inputId="password"
                                     type="password"
                                     placeholder="Password"
                                     value={password}
@@ -191,6 +197,7 @@ export default function Signup() {
 
                             {/* Confirm Password */}
                             <div>
+                               <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
                                 {confirmPassworderror && (
                                     <p className="text-xs text-red-500 mt-1 ml-2">
                                         {confirmPassworderror}
@@ -198,6 +205,7 @@ export default function Signup() {
                                 )}
                                 <InputComponent
                                     name="confirmPassword"
+                                    inputId="confirmPassword"
                                     type="password"
                                     placeholder="Confirm password"
                                     value={confirmPassword}

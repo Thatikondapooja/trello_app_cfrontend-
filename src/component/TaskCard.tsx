@@ -8,6 +8,7 @@ import { archiveCardThunk } from "../features/auth/card/cardThunks";
 import { useAppDispatch } from "../app/hooks";
 import { addActivity } from "../features/activity/activitySlice";
 import { clearSelectedCard } from "../features/auth/card/cardSlice";
+
 const LABEL_COLORS: Record<LabelColor, string> = {
     red: "bg-red-500",
     orange: "bg-orange-500",
@@ -37,21 +38,21 @@ export default function TaskCard({ card, onClick }: Props) {
             listId: card.listId,
         },
     });
-      const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
     const checklistStats = card.checklistSummary ?? null;
     console.log("checklistStats", checklistStats)
-const handleArchive = () => {
-  dispatch(archiveCardThunk(card.id));
-  dispatch(
-    addActivity({
-      id: Date.now().toString(),
-      message: `Card "${card.title}" archived`,
-      timestamp: Date.now(),
-    })
-  );
-  dispatch(clearSelectedCard());
-};
+    const handleArchive = () => {
+        dispatch(archiveCardThunk(card.id));
+        dispatch(
+            addActivity({
+                id: Date.now().toString(),
+                message: `Card "${card.title}" archived`,
+                timestamp: Date.now(),
+            })
+        );
+        dispatch(clearSelectedCard());
+    };
 
     return (
         <div
@@ -76,12 +77,11 @@ const handleArchive = () => {
             <div className="flex flex-row justify-between ">
                 <div className="font-medium">{card.title}</div>
                 <button onClick={(e) => {
-                        e.stopPropagation();   // 🔥 THIS LINE FIXES EVERYTHING
+                    e.stopPropagation();   // 🔥 THIS LINE FIXES EVERYTHING
 
                     handleArchive();
-                    
                 }}>
-                    <Archive  className="text-gray-400 hover:text-gray-600 size-4" />
+                    <Archive className="text-gray-400 hover:text-gray-600 size-4" />
                 </button>
             </div>
 

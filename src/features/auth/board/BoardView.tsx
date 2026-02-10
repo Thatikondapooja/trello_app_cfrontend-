@@ -20,7 +20,7 @@ import InputComponent from "../../../components/comman/inputComponent";
 import Button from "../../../components/comman/Button";
 import Tooltip from "../../../components/comman/Tooltip";
 import ListColumn from "../../../component/kanban/ListCloumns";
-import ActivityDetailes from "../../../component/activity/ActivityDetails";
+import ActivityDetails from "../../../component/activity/ActivityDetails";
 import { createList, fetchLists } from "../list/listThunks";
 import { createCard, fetchCardById, fetchCardsByList, moveCardThunk } from "../card/cardThunks";
 import { clearSelectedCard, reorderCards } from "../card/cardSlice";
@@ -123,7 +123,7 @@ export default function BoardView() {
             const list = lists.find((l) => l.id === active.id);
             if (list) setActiveList(list);
         } else {
-            const card = cards.find((c) => c.id === active.id);
+            const card = cards.find((c) => c.id === Number(active.id));
             if (card) setActiveCard(card);
         }
     };
@@ -153,7 +153,7 @@ export default function BoardView() {
         const fromListId = activeCard.listId;
         const toListId =
             over.data.current?.listId ??
-            cards.find((c) => c.id === over.id)?.listId;
+            cards.find((c) => c.id === Number(over.id))?.listId;
 
         if (!toListId) return;
 
@@ -208,15 +208,16 @@ export default function BoardView() {
                     </div>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4">
-                    <ActivityDetailes />
-                    <button
-                        onClick={() => setShowArchived(true)}
-                        className="flex items-center justify-center p-2 md:px-3 md:py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition shrink-0"
-                        title="Archived Cards"
-                    >
-                        <ArchiveRestore size={18} className="md:mr-1" />
-                        <span className="hidden md:inline text-sm">Archived cards</span>
-                    </button>
+                    <Tooltip content="Activity Details"><ActivityDetails /></Tooltip>
+                    <Tooltip content="Archived Cards">
+                        <button
+                            onClick={() => setShowArchived(true)}
+                            className="flex items-center justify-center p-2 md:px-3 md:py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition shrink-0"
+                        >
+                            <ArchiveRestore size={18} className="md:mr-1" />
+                            <span className="hidden md:inline text-sm">Archived cards</span>
+                        </button>
+                    </Tooltip>
                     {showArchived && (
                         <ArchivedCardsPanel onClose={() => setShowArchived(false)} />
                     )}

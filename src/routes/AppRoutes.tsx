@@ -11,6 +11,7 @@ import ResetPassword from "../page/ResetPassword";
 import VerifyForgotOtp from "../page/VerifyForgotPwd";
 import SendOtp from "../page/SendOtp";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const AppRoutes = () => {
@@ -29,8 +30,6 @@ const AppRoutes = () => {
                 draggable
                 pauseOnHover
                 theme="colored" />
-            <ToastContainer />
-
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/Signup" element={<Signup />} />

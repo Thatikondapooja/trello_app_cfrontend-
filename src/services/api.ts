@@ -15,6 +15,11 @@ api.interceptors.request.use(
             config.headers.Authorization = `Bearer ${token}`;
         }
 
+        // Set Content-Type for all requests (tells backend we're sending JSON)
+        if (!config.headers['Content-Type']) {
+            config.headers['Content-Type'] = 'application/json';
+        }
+
         return config;
     },
     (error) => Promise.reject(error)
@@ -34,7 +39,7 @@ api.interceptors.response.use(
             try {
                 const refreshToken = localStorage.getItem("refresh_token");
 
-               const res= await axios.post(`${process.env.REACT_APP_API_URL}/auth/refresh`, { refreshToken });
+                const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/refresh`, { refreshToken });
 
                 const newAccessToken = res.data.accessToken;
 
