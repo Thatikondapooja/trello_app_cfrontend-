@@ -5,13 +5,14 @@ import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
-import Signup from '../Signup';
-import authReducer from '../../features/auth/authSlice';
-import { AuthState } from '../../features/auth/types';
+import Signup from '../pages/Signup';
+import authReducer from '../features/auth/authSlice';
+import { AuthState } from '../features/auth/types';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 
+
 // ✅ mock API service
-jest.mock('../../services/AuthService', () => ({
+jest.mock('../services/AuthService', () => ({
   signup: jest.fn(),
 }));
 
