@@ -33,7 +33,9 @@ api.interceptors.response.use(
         const originalRequest = error.config;
 
         // 1️⃣ Access token expired
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        const isAuthRequest = originalRequest.url?.includes('auth/login') || originalRequest.url?.includes('auth/register');
+
+        if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
             originalRequest._retry = true;
 
             try {
