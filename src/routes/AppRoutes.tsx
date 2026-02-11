@@ -9,7 +9,6 @@ import CreateBoard from "../features/auth/board/CreateBoard";
 import ForgotPassword from "../page/ForgotPassword";
 import ResetPassword from "../page/ResetPassword";
 import VerifyForgotOtp from "../page/VerifyForgotPwd";
-import SendOtp from "../page/SendOtp";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -56,7 +55,6 @@ const AppRoutes = () => {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/verify-forgot-otp" element={<VerifyForgotOtp />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/SendOtp" element={<SendOtp />} />
 
             </Routes>
         </BrowserRouter>
