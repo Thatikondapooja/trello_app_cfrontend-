@@ -6,9 +6,9 @@ import BoardView from "../features/auth/board/BoardView";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import CreateBoard from "../features/auth/board/CreateBoard";
-import ForgotPassword from "../page/ForgotPassword";
-import ResetPassword from "../page/ResetPassword";
-import VerifyForgotOtp from "../page/VerifyForgotPwd";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import VerifyForgotOtp from "../pages/VerifyForgotPwd";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

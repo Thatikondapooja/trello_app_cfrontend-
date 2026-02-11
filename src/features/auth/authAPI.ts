@@ -12,7 +12,9 @@ export const registerUser = createAsyncThunk(
 
             return res.data;
         } catch (err: any) {
-            return rejectWithValue(err.response?.data?.message || "Register failed");
+            const message = err.response?.data?.message;
+            const errorMessage = Array.isArray(message) ? message[0] : (typeof message === 'string' ? message : "Register failed");
+            return rejectWithValue(errorMessage);
         }
     }
 );
@@ -33,7 +35,9 @@ export const loginUser = createAsyncThunk(
 
             return res.data;
         } catch (err: any) {
-            return rejectWithValue(err.response?.data?.message || "Login failed");
+            const message = err.response?.data?.message;
+            const errorMessage = Array.isArray(message) ? message[0] : (typeof message === 'string' ? message : "Login failed");
+            return rejectWithValue(errorMessage);
         }
     }
 ) 

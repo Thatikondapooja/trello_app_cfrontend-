@@ -54,8 +54,9 @@ export default function ResetPassword() {
 
                 <div className="space-y-4">
                     <div className="space-y-2">
-                        <label className="text-xs font-semibold text-slate-600 ml-1">New Password</label>
+                        <label  htmlFor="New Password" className="text-xs font-semibold text-slate-600 ml-1">New Password</label>
                         <InputComponent
+                        inputId="New Password"  
                             className="w-full"
                             placeholder="••••••••"
                             type="password"

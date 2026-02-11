@@ -66,7 +66,9 @@ export default function Login() {
         dispatch(loginUser({ email, password }))
             .unwrap()//Converts thunk result into normal Promise
             .then(() => navigate("/dashboard"))
-            .catch(() => { });
+            .catch(() => {
+
+            });
     };
 
     /* ---------------- REDIRECT ---------------- */
@@ -128,7 +130,7 @@ export default function Login() {
 
                     {/* Password */}
                     <div>
-                    <label htmlFor="password"  className="sr-only">Password</label>
+                        <label htmlFor="password" className="sr-only">Password</label>
                         {passwordError && (
                             <p className="text-xs text-red-500 mt-1 ml-2">{passwordError}</p>
                         )}

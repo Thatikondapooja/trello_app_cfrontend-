@@ -5,16 +5,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import Dashboard from './dashboard/Dashboard';
-import authReducer from "../features/auth/authSlice";
-import boardReducer from "../features/auth/board/boardSlice";
+import Dashboard from './Dashboard';
+import authReducer from "../../features/auth/authSlice";
+import boardReducer from "../../features/auth/board/boardSlice";
 // Create mock Redux store with test data
+import rootReducer from "../../app/rootReducer";
 
 const mockStore = (boards: any[], user: any) => configureStore({
-    reducer: {
-        auth: authReducer,
-        board: boardReducer
-    },
+    reducer: rootReducer,
     preloadedState: {
         auth: {
             user: user ? JSON.parse(JSON.stringify(user)) : null,
@@ -27,6 +25,32 @@ const mockStore = (boards: any[], user: any) => configureStore({
         board: {
             boards: boards ? JSON.parse(JSON.stringify(boards)) : [],
             selectedBoard: null,
+            loading: false,
+            error: null,
+        },
+        list: {
+            lists: [],
+            loading: false,
+            error: null,
+        },
+        card: {
+            cards: [],
+            selectedCard: null,
+            loading: false,
+            error: null,
+        },
+        activity: {
+            activities: [],
+            loading: false,
+            error: null,
+        },
+        checklist: {
+            checklists: [],
+            loading: false,
+            error: null,
+        },
+        members: {
+            members: [],
             loading: false,
             error: null,
         }
