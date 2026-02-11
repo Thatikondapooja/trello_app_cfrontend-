@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../app/hooks";
 import { createBoard } from "./boardThunks";
+import InputComponent from "../../../components/comman/inputComponent";
+import Button from "../../../components/comman/Button";
 
 const CreateBoard = () => {
     const navigate = useNavigate();
@@ -10,6 +12,7 @@ const CreateBoard = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [error, setError] = useState("");
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         // async function handleSubmit(e: React.FormEvent){// }
@@ -40,15 +43,17 @@ const CreateBoard = () => {
             >
                 <h2 className="text-2xl font-bold mb-6">Create Board</h2>
 
-                {error && (
-                    <p className="text-sm text-red-500 mb-4">{error}</p>
-                )}
+               
 
                 <div className="mb-4">
-                    <label className="block text-sm font-semibold mb-1">
+                    <label htmlFor="title" className="block text-sm font-semibold mb-1">
                         Title
                     </label>
-                    <input
+                     {error && (
+                    <p className="text-sm text-red-500 ">{error}</p>
+                )}
+                    <InputComponent
+                        inputId="title"
                         className="w-full border rounded-lg px-3 py-2"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -57,10 +62,11 @@ const CreateBoard = () => {
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-sm font-semibold mb-1">
+                    <label htmlFor="description" className="block text-sm font-semibold mb-1">
                         Description
                     </label>
                     <textarea
+                    id="description"
                         className="w-full border rounded-lg px-3 py-2"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -69,20 +75,20 @@ const CreateBoard = () => {
                 </div>
 
                 <div className="flex justify-end gap-3">
-                    <button
+                    <Button
                         type="button"
                         onClick={() => navigate("/dashboard")}
-                        className="px-4 py-2 rounded-lg border"
+                        className="px-4 py-2 rounded-lg border bg-gray-600 text-white hover:bg-gray-700"
                     >
                         Cancel
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
                         type="submit"
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg"
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                     >
                         Create
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>

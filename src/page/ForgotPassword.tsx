@@ -57,11 +57,13 @@ export default function ForgotPassword() {
                 </div>
 
                 <div className="space-y-4">
+                    <label htmlFor="email" className="sr-only">Email</label>
                     <InputComponent
+                        inputId="email"
+                        type="email"
                         className="w-full"
                         placeholder="Enter your email"
                         value={email}
-                        inputId="email"
                         onChange={(e) => setEmail(e.target.value)}
                     />
 

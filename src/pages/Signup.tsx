@@ -29,8 +29,7 @@ export default function Signup() {
     /* ---------------- HANDLERS ---------------- */
 
     function names(e: React.ChangeEvent<HTMLInputElement>) {
-        const setnamee = setName(e.target.value)
-        console.log("setnamee", setnamee)
+        setName(e.target.value)
 
     }
     function emailId(e: React.ChangeEvent<HTMLInputElement>) {

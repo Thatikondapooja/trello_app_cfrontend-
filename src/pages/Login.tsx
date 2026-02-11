@@ -60,7 +60,6 @@ export default function Login() {
         const isPasswordValid = validatePassword();
 
         if (!isEmailValid || !isPasswordValid) return;
-        console.log("login")
         // 🚧 TEMP (frontend-only)
         // Later we will replace this with backend API call
         // dispatch(loginSuccess({ email }));
@@ -113,10 +112,12 @@ export default function Login() {
                 <form onSubmit={handleLogin} className="space-y-4">
                     {/* Email */}
                     <div>
+                        <label htmlFor="email" className="sr-only">Email</label>
                         {emailError && (
                             <p className="text-xs text-red-500 mt-1 ml-2">{emailError}</p>
                         )}
                         <InputComponent
+                            inputId="email"
                             type="email"
                             placeholder="Email address"
                             value={email}
@@ -127,10 +128,12 @@ export default function Login() {
 
                     {/* Password */}
                     <div>
+                    <label htmlFor="password"  className="sr-only">Password</label>
                         {passwordError && (
                             <p className="text-xs text-red-500 mt-1 ml-2">{passwordError}</p>
                         )}
                         <InputComponent
+                            inputId="password"
                             type="password"
                             placeholder="Password"
                             value={password}

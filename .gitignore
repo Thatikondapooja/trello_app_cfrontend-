@@ -22,6 +22,9 @@ Thumbs.db
 # editor
 .vscode/
 
+# testing & coverage
+coverage/
+
+# storybook
 *storybook.log
 storybook-static
-coverage/
