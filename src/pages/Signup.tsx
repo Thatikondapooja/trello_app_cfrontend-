@@ -3,9 +3,10 @@ import InputComponent from "../components/comman/inputComponent";
 import Button from "../components/comman/Button";
 import Tooltip from "../components/comman/Tooltip";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { registerUser } from "../features/auth/authAPI";
-import { useAppSelector } from "../app/hooks";
+import { clearError } from "../features/auth/authSlice";
+import { useEffect } from "react";
 
 
 export default function Signup() {
@@ -23,6 +24,10 @@ export default function Signup() {
     const [passworderror, setpasswordErrors] = useState("")
     const [confirmPassworderror, setConfirmPasswordErrors] = useState("")
     const { error, loading } = useAppSelector((state) => state.auth);
+
+    useEffect(() => {
+        dispatch(clearError());
+    }, [dispatch]);
 
 
 
@@ -149,7 +154,7 @@ export default function Signup() {
                                     <p className="text-xs text-red-500 mt-1 ml-2">{nameerror}</p>
                                 )}
                                 <InputComponent
-                                inputId="FullName"
+                                    inputId="FullName"
                                     name="FullName"
                                     type="text"
                                     placeholder="Full name"
@@ -179,7 +184,7 @@ export default function Signup() {
                             {/* Password */}
                             <div>
 
-                             <label htmlFor="password" className="sr-only">Password</label>
+                                <label htmlFor="password" className="sr-only">Password</label>
                                 {passworderror && (
                                     <p className="text-xs text-red-500 mt-1 ml-2">{passworderror}</p>
                                 )}
@@ -196,7 +201,7 @@ export default function Signup() {
 
                             {/* Confirm Password */}
                             <div>
-                               <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
+                                <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
                                 {confirmPassworderror && (
                                     <p className="text-xs text-red-500 mt-1 ml-2">
                                         {confirmPassworderror}

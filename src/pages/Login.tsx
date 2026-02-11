@@ -4,7 +4,8 @@ import Button from "../components/comman/Button";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authAPI";
-// import { loginSuccess } from "../features/auth/authSlice";
+import { clearError } from "../features/auth/authSlice";
+import { useEffect } from "react";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -16,6 +17,10 @@ export default function Login() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { error, loading } = useAppSelector((state) => state.auth);
+
+    useEffect(() => {
+        dispatch(clearError());
+    }, [dispatch]);
 
 
     /* ---------------- VALIDATIONS ---------------- */
