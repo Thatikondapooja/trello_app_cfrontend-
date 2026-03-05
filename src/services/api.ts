@@ -7,39 +7,37 @@ const api = axios.create({
 console.log("API BASE URL:", process.env.REACT_APP_API_URL);
 
 /* ---------------- REQUEST INTERCEPTOR ---------------- */
-// api.interceptors.request.use(
-//     (config) => {
-//         const token = localStorage.getItem("access_token");
-//         console.log("token", token)
-//         if (token) {
-//             config.headers.Authorization = `Bearer ${token}`;
-//         }
+api.interceptors.request.use(
+    (config) => {
+       const token = localStorage.getItem("access_token");   
+           console.log("token", token)
+       if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+       }
 
-//         // Set Content-Type for all requests (tells backend we're sending JSON)
-//         if (!config.headers['Content-Type']) {
-//             config.headers['Content-Type'] = 'application/json';
-//         }
-
-//         return config;
-//     },
-//     (error) => Promise.reject(error)
-// );
+         // Set Content-Type for all requests (tells backend we're sending JSON)
+        if (!config.headers['Content-Type']) {
+            config.headers['Content-Type'] = 'application/json';      }
+       return config;
+   },
+   (error) => Promise.reject(error)
+);
 
 
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
+// api.interceptors.request.use((config) => {
+//   const token = localStorage.getItem("access_token");
 
-  const isAuthRequest =
-    config.url?.includes("/auth/login") ||
-    config.url?.includes("/auth/register");
+//   const isAuthRequest =
+//     config.url?.includes("/auth/login") ||
+//     config.url?.includes("/auth/register");
 
-  if (token && !isAuthRequest) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+//   if (token && !isAuthRequest) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
 
-  return config;
-});
+//   return config;
+// });
 /* ---------------- RESPONSE INTERCEPTOR ---------------- */
 api.interceptors.response.use(
     (response) => response,
