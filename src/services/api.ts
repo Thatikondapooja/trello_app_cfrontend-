@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL, // NestJS backend
-    withCredentials: true,
+ 
 });
 console.log("API BASE URL:", process.env.REACT_APP_API_URL);
 
