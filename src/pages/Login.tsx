@@ -34,7 +34,7 @@ export default function Login() {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!regex.test(email)) {
             setEmailError("Enter a valid email address");
-            return false;
+            return false
         }
 
         setEmailError("");
