@@ -90,7 +90,7 @@ export default function BoardView() {
     }
 
     const handleAddList = () => {
-        if (!listTitle || !selectedBoardId) return
+        if (!listTitle || !selectedBoardId) return;
         dispatch(
             createList({
                 title: listTitle,
