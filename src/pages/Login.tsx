@@ -73,7 +73,7 @@ export default function Login() {
             .unwrap()//Converts thunk result into normal Promise
             .then(() => navigate("/dashboard"))
             .catch(() => {
-
+console.log("CI working");
             });
     };
 
