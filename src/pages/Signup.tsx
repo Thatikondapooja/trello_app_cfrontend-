@@ -8,7 +8,7 @@ import { registerUser } from "../features/auth/authAPI";
 import { clearError } from "../features/auth/authSlice";
 import { useEffect } from "react";
 
-
+// test cherry-pick commit
 export default function Signup() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
