@@ -236,7 +236,7 @@ test('shows error for fullNames', async () => {
 });
 
 
-test('shows API error message from redux state', () => {
+test('shows API error message from redux state', async () => {
   const errorStore = configureStore({
     reducer: { auth: authReducer },
     preloadedState: {
@@ -251,8 +251,8 @@ test('shows API error message from redux state', () => {
 
   render(
     <Provider store={errorStore}>
-      <MemoryRouter>
-        <TooltipProvider>
+<MemoryRouter future={{ v7_relativeSplatPath: true }}>
+          <TooltipProvider>
           <Signup />
         </TooltipProvider>
       </MemoryRouter>
@@ -260,6 +260,6 @@ test('shows API error message from redux state', () => {
   );
 
   expect(
-    screen.getByText(/email already exists/i)
+    await screen.findByText(/email already exists/i)
   ).toBeInTheDocument();
 });

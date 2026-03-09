@@ -25,10 +25,11 @@ export default function Signup() {
     const [confirmPassworderror, setConfirmPasswordErrors] = useState("")
     const { error, loading } = useAppSelector((state) => state.auth);
 
-    useEffect(() => {
-        dispatch(clearError());
-    }, [dispatch]);
-
+   useEffect(() => {
+  return () => {
+    dispatch(clearError());
+  };
+}, [dispatch]);
 
 
     /* ---------------- HANDLERS ---------------- */

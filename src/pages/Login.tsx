@@ -18,10 +18,11 @@ export default function Login() {
     const navigate = useNavigate();
     const { error, loading } = useAppSelector((state) => state.auth);
 
-    useEffect(() => {
-        dispatch(clearError());
-    }, [dispatch]);
-
+     useEffect(() => {
+  return () => {
+    dispatch(clearError());
+  };
+}, [dispatch]);
 
     /* ---------------- VALIDATIONS ---------------- */
 
